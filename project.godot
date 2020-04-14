@@ -23,7 +23,6 @@ config/icon="res://icon.png"
 
 window/size/width=1280
 window/size/height=720
-window/size/fullscreen=true
 window/vsync/use_vsync=false
 window/stretch/mode="2d"
 window/stretch/aspect="keep"
@@ -152,14 +151,9 @@ Weapon4={
 [rendering]
 
 threads/thread_model=2
-quality/shadow_atlas/quadrant_0_subdiv=6
-quality/shadow_atlas/quadrant_1_subdiv=6
-quality/shadow_atlas/quadrant_2_subdiv=6
-quality/shadow_atlas/quadrant_3_subdiv=6
 quality/shadows/filter_mode=2
-quality/filters/use_nearest_mipmap_filter=true
 quality/subsurface_scattering/quality=2
 quality/subsurface_scattering/follow_surface=true
 quality/voxel_cone_tracing/high_quality=true
-quality/filters/msaa=4
+environment/default_clear_color=Color( 0.301961, 0.301961, 0.301961, 1 )
 environment/default_environment="res://default_env.tres"
