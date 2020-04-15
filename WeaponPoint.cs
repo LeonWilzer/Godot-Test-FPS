@@ -68,7 +68,6 @@ public abstract class WeaponPoint : Spatial
 
     public bool ReloadWeapon()
     {
-        GD.Print("Reloading Weapon");
         bool canReload = false;
 
         if (playernode.AnimationPlayer.CurrentState == idleAnimName)
