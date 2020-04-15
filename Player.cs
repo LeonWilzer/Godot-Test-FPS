@@ -17,7 +17,7 @@ using System.Collections.Generic;
 
 public class Player : KinematicBody
 {
-	// Engine Player Properties
+	// Engine Properties
 	[Export]
 	public float Gravity = -24.8f;
 	[Export]
@@ -46,6 +46,8 @@ public class Player : KinematicBody
 	private string _currentWeaponName;
 	private bool _changingWeapon;
 	private bool _reloadingWeapon;
+	private float _mouseScrollValue;
+	private float _mouseSensitivityScrollWheel = 0.08f;
 
 	// Relevant Nodes.
 	private SpotLight _flashlight;
@@ -199,29 +201,30 @@ public class Player : KinematicBody
 		//  -------------------------------------------------------------------
 		//  Changing _weapons
 
-		int WeaponChangeNumber = _weaponNameToNumber[_currentWeaponName];
+		int _weaponChangeNumber = _weaponNameToNumber[_currentWeaponName];
 
 		if (Input.IsActionJustPressed("Weapon1"))
-			WeaponChangeNumber = 0;
+			_weaponChangeNumber = 0;
 		if (Input.IsActionJustPressed("Weapon2"))
-			WeaponChangeNumber = 1;
+			_weaponChangeNumber = 1;
 		if (Input.IsActionJustPressed("Weapon3"))
-			WeaponChangeNumber = 2;			
+			_weaponChangeNumber = 2;			
 		if (Input.IsActionJustPressed("Weapon4"))
-			WeaponChangeNumber = 3;
+			_weaponChangeNumber = 3;
 
 		if (Input.IsActionJustPressed("shift_weapon_positive"))
-			WeaponChangeNumber++;
+			_weaponChangeNumber++;
 		if (Input.IsActionJustPressed("shift_weapon_negative"))
-			WeaponChangeNumber--;
+			_weaponChangeNumber--;
 
-		WeaponChangeNumber = Mathf.Clamp(WeaponChangeNumber, 0 , _weaponNumberToName.Count);
+		_weaponChangeNumber = Mathf.Clamp(_weaponChangeNumber, 0 , _weaponNumberToName.Count);
 
-		if (_weaponNumberToName[WeaponChangeNumber] != _currentWeaponName)
+		if (_weaponNumberToName[_weaponChangeNumber] != _currentWeaponName)
 			if ( !_reloadingWeapon && !_changingWeapon)
 			{
-				_changingWeaponName = _weaponNumberToName[WeaponChangeNumber];
+				_changingWeaponName = _weaponNumberToName[_weaponChangeNumber];
 				_changingWeapon = true;
+				_mouseScrollValue = _weaponChangeNumber;
 			}
 		//  -------------------------------------------------------------------
 		
@@ -370,6 +373,26 @@ public class Player : KinematicBody
 			// Clamp rotation around x-axis so that player doesn't overturn
 			cameraRot.x = Mathf.Clamp(cameraRot.x, -100, 120);
 			_rotationHelper.RotationDegrees = cameraRot;
+			if (mouseEvent.ButtonMask == 4 || mouseEvent.ButtonMask == 5)
+			{
+			if (mouseEvent.ButtonMask == 4)
+				_mouseScrollValue += _mouseSensitivityScrollWheel;
+			else if (mouseEvent.ButtonMask == 5)
+				_mouseScrollValue -= _mouseSensitivityScrollWheel;
+
+			_mouseScrollValue = Mathf.Clamp(_mouseScrollValue, 0, _weaponNumberToName.Count -1);
+
+			if (!_changingWeapon && !_reloadingWeapon)
+				{
+					int _roundMouseScrollValue = (int)Mathf.Round(_mouseScrollValue);
+					if (_weaponNumberToName[_roundMouseScrollValue] != _currentWeaponName)
+					{
+						_changingWeaponName = _weaponNumberToName[_roundMouseScrollValue];
+						_changingWeapon = true;
+						_mouseScrollValue = _roundMouseScrollValue;
+					}
+				}
+			}
 		}
 	}
 
