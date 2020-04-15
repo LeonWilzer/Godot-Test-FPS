@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/GUN_MP5K_Mag_Insert_06.wav-056001563763dacd94d3a508ce2a2610.sample"
+
+[deps]
+
+source_file="res://assets/audio/sounds/weapons/GUN_MP5K_Mag_Insert_06.wav"
+dest_files=[ "res://.import/GUN_MP5K_Mag_Insert_06.wav-056001563763dacd94d3a508ce2a2610.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

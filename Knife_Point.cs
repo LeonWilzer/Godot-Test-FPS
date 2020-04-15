@@ -16,7 +16,7 @@ using System;
 
 public class Knife_Point : WeaponPoint
 {
-    // Called when the node enters the scene tree for the first time.
+    // Constructor
     public override void _Ready()
     {
         damage = 30;
@@ -29,6 +29,7 @@ public class Knife_Point : WeaponPoint
         canReload = false;
         canRefill = false;
         reloadingAnimName = "null";
+        gunFireSound = null;
     }
 
     public override void FireWeapon()

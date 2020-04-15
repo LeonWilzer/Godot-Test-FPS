@@ -16,7 +16,7 @@ using System;
 
 public class Rifle_Point : WeaponPoint
 {
-    // Called when the node enters the scene tree for the first time.
+    // Constructor
     public override void _Ready()
     {
         damage = 15;
@@ -31,6 +31,8 @@ public class Rifle_Point : WeaponPoint
         canReload = true;
         canRefill = true;
         reloadingAnimName = "Rifle_reload";
+        gunFireSound = "Rifle_shot";
+        gunCockSound = "Gun_cock";
     }
 
     public override void FireWeapon()
@@ -46,5 +48,7 @@ public class Rifle_Point : WeaponPoint
             if (body != playernode)
                 HitTest.BulletHit(body, damage, Ray.GlobalTransform);
         }
+
+        playernode.CreateSound(gunFireSound, GlobalTransform.origin);
     }
 }

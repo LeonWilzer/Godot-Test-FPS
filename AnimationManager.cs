@@ -57,7 +57,7 @@ public class AnimationManager : AnimationPlayer
 		_animationSpeeds.Add("Rifle_equip",1.5f);
 		_animationSpeeds.Add("Rifle_fire",6f);
 		_animationSpeeds.Add("Rifle_idle",1f);
-		_animationSpeeds.Add("Rifle_reload",1);
+		_animationSpeeds.Add("Rifle_reload",1.5f);
 		_animationSpeeds.Add("Rifle_unequip",1.5f);
 
 		_animationSpeeds.Add("Knife_equip",3f);

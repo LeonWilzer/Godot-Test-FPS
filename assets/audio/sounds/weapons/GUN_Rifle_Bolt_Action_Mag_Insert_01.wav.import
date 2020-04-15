@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/GUN_Rifle_Bolt_Action_Mag_Insert_01.wav-a4e7f5161ee87dfb902853d91b3303ef.sample"
+
+[deps]
+
+source_file="res://assets/audio/sounds/weapons/GUN_Rifle_Bolt_Action_Mag_Insert_01.wav"
+dest_files=[ "res://.import/GUN_Rifle_Bolt_Action_Mag_Insert_01.wav-a4e7f5161ee87dfb902853d91b3303ef.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

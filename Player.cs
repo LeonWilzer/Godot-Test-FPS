@@ -49,11 +49,12 @@ public class Player : KinematicBody
 
 	// Relevant Nodes.
 	private SpotLight _flashlight;
-	public AnimationManager AnimationPlayer { get; set; }
+	public AnimationManager AnimationPlayer { get; private set; }
+	private PackedScene _simpleAudioPlayer;
 	private Vector3 _vel;
 	private Vector3 _dir;
 	private Label _uiStatusLabel;
-	private Camera _camera;
+	public Camera Camera { get; private set; }
 	private Spatial _rotationHelper;
 
 	// Dictionaries for weapons.
@@ -69,11 +70,11 @@ public class Player : KinematicBody
 		_dir = new Vector3();
 
 		// Assigns relevant Nodes to variables.
-		_camera = GetNode<Camera>("Rotation_Helper/Camera");
+		Camera = GetNode<Camera>("Rotation_Helper/Camera");
 		_rotationHelper = GetNode<Spatial>("Rotation_Helper");
 		_flashlight = GetNode<SpotLight>("Rotation_Helper/Flashlight");
 		AnimationPlayer = GetNode<AnimationManager>("Rotation_Helper/Model/Animation_Player");
-		//AnimationPlayer = GetNode<AnimationManager>("Rotation_Helper/Model/Animation_Player");
+		_simpleAudioPlayer = ResourceLoader.Load<PackedScene>("res://Simple_Audio_Player.tscn");
 		_uiStatusLabel = GetNode<Label>("HUD/Panel/Gun_label");
 		Vector3 GunAimPointPos = GetNode<Spatial>("Rotation_Helper/Gun_Aim_Point").GlobalTransform.origin;
 
@@ -136,7 +137,7 @@ public class Player : KinematicBody
 		//  -------------------------------------------------------------------
 		//  Walking
 		_dir = new Vector3();
-		Transform camXform = _camera.GlobalTransform;
+		Transform camXform = Camera.GlobalTransform;
 
 		Vector2 inputMovementVector = new Vector2();
 
@@ -232,7 +233,10 @@ public class Player : KinematicBody
 			if (_currentWeapon != null && _currentWeapon.ammoInWeapon > 0 )
 			{
 				if (AnimationPlayer.CurrentState == _currentWeapon.idleAnimName)
+				{
+					AnimationPlayer.CallbackFunction = GD.FuncRef(this, nameof(FireBullet));
 					AnimationPlayer.SetAnimation(_currentWeapon.fireAnimName);
+				}
 			}
 			else
 				_reloadingWeapon = true;
@@ -374,5 +378,18 @@ public class Player : KinematicBody
 		if (_changingWeapon)
 			return;
 		_weapons[_currentWeaponName].FireWeapon();
+	}
+
+	public void CreateSound(string _soundName, Vector3 position = new Vector3())
+	{
+		SimpleAudioPlayer _audioClone = (SimpleAudioPlayer)_simpleAudioPlayer.Instance();
+		Node _sceneRoot = GetTree().Root.GetChild(0);
+		_sceneRoot.AddChild(_audioClone);
+		_audioClone.PlaySound(_soundName, position);
+	}
+
+	public void CockGun()
+	{
+		CreateSound(_weapons[_currentWeaponName].gunCockSound,Camera.GlobalTransform.origin);
 	}
 }

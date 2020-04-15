@@ -17,7 +17,8 @@ using System;
 public class Pistol_Point : WeaponPoint
 {
     private PackedScene _bulletscene;
-    // Called when the node enters the scene tree for the first time.
+
+    // Constructor
     public override void _Ready()
     {
         damage = 5;
@@ -33,11 +34,13 @@ public class Pistol_Point : WeaponPoint
         canRefill = true;
         reloadingAnimName = "Pistol_reload";
         _bulletscene = ResourceLoader.Load<PackedScene>("Bullet_Scene.tscn");
+        gunFireSound = "Pistol_shot";
+        gunCockSound = "Gun_cock";
     }
 
     public override void FireWeapon()
     {
-        var clone = (Bullet_Scene)_bulletscene.Instance();
+        Bullet_Scene clone = (Bullet_Scene)_bulletscene.Instance();
         Node sceneRoot = GetTree().Root.GetChild(0);
         sceneRoot.AddChild(clone);
 
@@ -45,5 +48,7 @@ public class Pistol_Point : WeaponPoint
         clone.Scale = new Vector3(4, 4, 4);
         clone._bulletDamage = damage;
         ammoInWeapon--;
+        playernode.CreateSound(gunFireSound, GlobalTransform.origin);
+
     }
 }

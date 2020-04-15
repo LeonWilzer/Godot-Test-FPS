@@ -19,12 +19,14 @@ public abstract class WeaponPoint : Spatial
     // Weapon properties
     protected int damage;
 
-    // Animation names
+    // Asset names
     public string idleAnimName { get; protected set; }
     public string fireAnimName { get; protected set; }
     protected string unequipAnimation;
     protected string equipAnimation;
     public string reloadingAnimName { get; protected set; }
+    public string gunCockSound { get; protected set; }
+    protected string gunFireSound;
 
     // Variables
     public bool isWeaponEnabled { get; protected set; }
@@ -36,6 +38,12 @@ public abstract class WeaponPoint : Spatial
 
     // Nodes
     public Player playernode { protected get;  set; }
+
+    // Constructor
+    public override void _Ready()
+    {
+        gunCockSound = "Gun_cock";
+    }
 
     public abstract void FireWeapon();
     public bool UnequipWeapon()
@@ -91,6 +99,7 @@ public abstract class WeaponPoint : Spatial
             }
 
             playernode.AnimationPlayer.SetAnimation(reloadingAnimName);
+            //playernode.CreateSound(gunCockSound, playernode.Camera.GlobalTransform.origin);
             return true;
         }
         return false;

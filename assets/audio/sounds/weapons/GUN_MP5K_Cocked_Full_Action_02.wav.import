@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/GUN_MP5K_Cocked_Full_Action_02.wav-6bd8866477c0aa9efe9fdecec6a5c45d.sample"
+
+[deps]
+
+source_file="res://assets/audio/sounds/weapons/GUN_MP5K_Cocked_Full_Action_02.wav"
+dest_files=[ "res://.import/GUN_MP5K_Cocked_Full_Action_02.wav-6bd8866477c0aa9efe9fdecec6a5c45d.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

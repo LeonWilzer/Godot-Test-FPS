@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/GUN_G36K_Mag_Insert_04.wav-ba3db83206e2962c63f66b6b04a86faf.sample"
+
+[deps]
+
+source_file="res://assets/audio/sounds/weapons/GUN_G36K_Mag_Insert_04.wav"
+dest_files=[ "res://.import/GUN_G36K_Mag_Insert_04.wav-ba3db83206e2962c63f66b6b04a86faf.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0
