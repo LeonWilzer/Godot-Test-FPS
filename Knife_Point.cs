@@ -25,6 +25,10 @@ public class Knife_Point : WeaponPoint
         unequipAnimation = "Knife_unequip";
         equipAnimation = "Knife_equip";
         isWeaponEnabled = false;
+        ammoInWeapon = 1;
+        canReload = false;
+        canRefill = false;
+        reloadingAnimName = "null";
     }
 
     public override void FireWeapon()

@@ -25,13 +25,20 @@ public class Rifle_Point : WeaponPoint
         unequipAnimation = "Rifle_unequip";
         equipAnimation = "Rifle_equip";
         isWeaponEnabled = false;
+        ammoInWeapon = 50;
+        spareAmmo = 100;
+        ammoInMag = 50;
+        canReload = true;
+        canRefill = true;
+        reloadingAnimName = "Rifle_reload";
     }
 
     public override void FireWeapon()
     {
         RayCast Ray = GetNode<RayCast>("Ray_Cast");
         Ray.ForceRaycastUpdate();
-
+        ammoInWeapon--;
+        
         if (Ray.IsColliding())
         {
             var body = Ray.GetCollider();

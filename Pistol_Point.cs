@@ -25,7 +25,13 @@ public class Pistol_Point : WeaponPoint
         fireAnimName = "Pistol_fire";
         unequipAnimation = "Pistol_unequip";
         equipAnimation = "Pistol_equip";
+        ammoInWeapon = 10;
+        spareAmmo = 20;
+        ammoInMag = 10;
         isWeaponEnabled = false;
+        canReload = true;
+        canRefill = true;
+        reloadingAnimName = "Pistol_reload";
         _bulletscene = ResourceLoader.Load<PackedScene>("Bullet_Scene.tscn");
     }
 
@@ -38,5 +44,6 @@ public class Pistol_Point : WeaponPoint
         clone.GlobalTransform = GlobalTransform;
         clone.Scale = new Vector3(4, 4, 4);
         clone._bulletDamage = damage;
+        ammoInWeapon--;
     }
 }

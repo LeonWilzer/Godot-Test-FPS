@@ -17,13 +17,12 @@ _global_script_class_icons={
 
 config/name="Godot FPS"
 run/main_scene="res://Testing_Area.tscn"
-config/icon="res://icon.png"
+config/icon="res://FPS_project_icon.png"
 
 [display]
 
 window/size/width=1280
 window/size/height=720
-window/vsync/use_vsync=false
 window/stretch/mode="2d"
 window/stretch/aspect="keep"
 

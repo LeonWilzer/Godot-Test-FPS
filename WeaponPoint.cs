@@ -16,16 +16,25 @@ using System;
 
 public abstract class WeaponPoint : Spatial
 {
+    // Weapon properties
     protected int damage;
 
+    // Animation names
     public string idleAnimName { get; protected set; }
     public string fireAnimName { get; protected set; }
-
     protected string unequipAnimation;
     protected string equipAnimation;
+    public string reloadingAnimName { get; protected set; }
 
+    // Variables
     public bool isWeaponEnabled { get; protected set; }
+    public int ammoInWeapon { get; protected set; }
+    public int spareAmmo { get; protected set; }
+    protected int ammoInMag;
+    public bool canReload { get; protected set; }
+    protected bool canRefill;
 
+    // Nodes
     public Player playernode { protected get;  set; }
 
     public abstract void FireWeapon();
@@ -43,6 +52,7 @@ public abstract class WeaponPoint : Spatial
         }
         return false;
     }
+
     public bool EquipWeapon()
     {
         if ( playernode.AnimationPlayer.CurrentState == idleAnimName)
@@ -53,6 +63,37 @@ public abstract class WeaponPoint : Spatial
 
         if (playernode.AnimationPlayer.CurrentState == "Idle_unarmed")
             playernode.AnimationPlayer.SetAnimation(equipAnimation);
+        return false;
+    }
+
+    public bool ReloadWeapon()
+    {
+        GD.Print("Reloading Weapon");
+        bool canReload = false;
+
+        if (playernode.AnimationPlayer.CurrentState == idleAnimName)
+            canReload = true;
+        if (spareAmmo <= 0 || ammoInWeapon == ammoInMag)
+            canReload = false;
+            
+        if (canReload)
+        {
+            int _ammoNeeded = ammoInMag - ammoInWeapon;
+
+            if (spareAmmo >= _ammoNeeded)
+            {
+                spareAmmo -= _ammoNeeded;
+                ammoInWeapon = ammoInMag;
+            }
+            else
+            {
+                ammoInWeapon += spareAmmo;
+                spareAmmo = 0;
+            }
+
+            playernode.AnimationPlayer.SetAnimation(reloadingAnimName);
+            return true;
+        }
         return false;
     }
 }

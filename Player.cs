@@ -37,13 +37,15 @@ public class Player : KinematicBody
 	[Export]
 	public float SprintAccel = 18.0f;
 	// Character Stats
-	private float Health;
+	[Export]
+	public float Health = 100;
 
 	// Variables relevant for character actions.
 	private bool _isSprinting;
 	private string _changingWeaponName;
 	private string _currentWeaponName;
 	private bool _changingWeapon;
+	private bool _reloadingWeapon;
 
 	// Relevant Nodes.
 	private SpotLight _flashlight;
@@ -73,7 +75,7 @@ public class Player : KinematicBody
 		AnimationPlayer = GetNode<AnimationManager>("Rotation_Helper/Model/Animation_Player");
 		//AnimationPlayer = GetNode<AnimationManager>("Rotation_Helper/Model/Animation_Player");
 		_uiStatusLabel = GetNode<Label>("HUD/Panel/Gun_label");
-		var GunAimPointPos = GetNode<Spatial>("Rotation_Helper/Gun_Aim_Point").GlobalTransform.origin;
+		Vector3 GunAimPointPos = GetNode<Spatial>("Rotation_Helper/Gun_Aim_Point").GlobalTransform.origin;
 
 		// Dictionary for Weapon Nodes.
 		_weapons.Add("KNIFE", GetNode<Knife_Point>("Rotation_Helper/Gun_Fire_Points/Knife_Point"));
@@ -86,12 +88,12 @@ public class Player : KinematicBody
 		{
 			if (_weapons[Weapon] != null)
 			{
-			WeaponPoint WeaponNode = _weapons[Weapon];
-			WeaponNode.playernode = this;
+			WeaponPoint _weaponNode = _weapons[Weapon];
+			_weaponNode.playernode = this;
 			// Make Weaponnode point towards the aim position.
-			WeaponNode.LookAt(GunAimPointPos, new Vector3(0,1,0));
+			_weaponNode.LookAt(GunAimPointPos, new Vector3(0,1,0));
 			// Rotate it by 180° on the Y axis.
-			WeaponNode.RotateObjectLocal(new Vector3(0,1,0), Mathf.Deg2Rad(180));
+			_weaponNode.RotateObjectLocal(new Vector3(0,1,0), Mathf.Deg2Rad(180));
 			}
 		}
 
@@ -111,6 +113,7 @@ public class Player : KinematicBody
 		_changingWeaponName = "UNARMED";
 		_currentWeaponName = "UNARMED";
 		_isSprinting = false;
+		_reloadingWeapon = false;
 
 		// The method being called once an fire animation plays.
 		AnimationPlayer.CallbackFunction = GD.FuncRef(this, nameof(FireBullet));
@@ -124,8 +127,8 @@ public class Player : KinematicBody
 		ProcessInput(delta);
 		ProcessMovement(delta);
 		ProcessChangingWeapons(delta);
-		Health = Engine.GetFramesPerSecond();
-		GD.Print(Engine.GetFramesPerSecond());
+		ProcessUI(delta);
+		ProcessReloading(delta);
 	}
 	
 	private void ProcessInput(float delta)
@@ -195,7 +198,7 @@ public class Player : KinematicBody
 		//  -------------------------------------------------------------------
 		//  Changing _weapons
 
-		var WeaponChangeNumber = _weaponNameToNumber[_currentWeaponName];
+		int WeaponChangeNumber = _weaponNameToNumber[_currentWeaponName];
 
 		if (Input.IsActionJustPressed("Weapon1"))
 			WeaponChangeNumber = 0;
@@ -213,21 +216,50 @@ public class Player : KinematicBody
 
 		WeaponChangeNumber = Mathf.Clamp(WeaponChangeNumber, 0 , _weaponNumberToName.Count);
 
-		if (_weaponNumberToName[WeaponChangeNumber] != _currentWeaponName && !_changingWeapon)
-		{
-			_changingWeaponName = _weaponNumberToName[WeaponChangeNumber];
-			_changingWeapon = true;
-		}
+		if (_weaponNumberToName[WeaponChangeNumber] != _currentWeaponName)
+			if ( !_reloadingWeapon && !_changingWeapon)
+			{
+				_changingWeaponName = _weaponNumberToName[WeaponChangeNumber];
+				_changingWeapon = true;
+			}
 		//  -------------------------------------------------------------------
 		
 		//  -------------------------------------------------------------------
 		//  Firing Weapon
-		if (Input.IsActionPressed("fire") && !_changingWeapon)
+		if (Input.IsActionPressed("fire") && !_changingWeapon && !_reloadingWeapon)
 		{
-			var CurrentWeapon = _weapons[_currentWeaponName];
-			if (CurrentWeapon != null && AnimationPlayer.CurrentState == CurrentWeapon.idleAnimName)
-				AnimationPlayer.SetAnimation(CurrentWeapon.fireAnimName);
+			WeaponPoint _currentWeapon = _weapons[_currentWeaponName];
+			if (_currentWeapon != null && _currentWeapon.ammoInWeapon > 0 )
+			{
+				if (AnimationPlayer.CurrentState == _currentWeapon.idleAnimName)
+					AnimationPlayer.SetAnimation(_currentWeapon.fireAnimName);
+			}
+			else
+				_reloadingWeapon = true;
+				
 		}
+		//  -------------------------------------------------------------------
+
+		//  -------------------------------------------------------------------
+		//	Reloading
+		if (!_reloadingWeapon && !_changingWeapon && Input.IsActionJustPressed("reload"))
+		{
+			WeaponPoint _currentWeapon = _weapons[_currentWeaponName];
+			if (_currentWeapon != null && _currentWeapon.canReload)
+			{
+				string _currentAnimState = AnimationPlayer.CurrentState;
+				bool _isReloading = false;
+				foreach (string _weapon in _weapons.Keys)
+				{
+					WeaponPoint _weaponNode = _weapons[_weapon];
+						if ( _weaponNode != null && _currentAnimState == _weaponNode.reloadingAnimName )
+							_isReloading = true;
+				}
+				if (!_isReloading)
+					_reloadingWeapon = true;
+			}
+		}
+
 		//  -------------------------------------------------------------------
 	}
 	 private void ProcessMovement(float delta)
@@ -264,20 +296,20 @@ public class Player : KinematicBody
 	{
 		if (_changingWeapon == true)
 		{
-			var WeaponUnequipped = false;
-			var CurrentWeapon = _weapons[_currentWeaponName];
+			bool WeaponUnequipped = false;
+			WeaponPoint _currentWeapon = _weapons[_currentWeaponName];
 
-			if (CurrentWeapon == null)
+			if (_currentWeapon == null)
 				WeaponUnequipped = true;
-			else if (CurrentWeapon.isWeaponEnabled == true)
-				WeaponUnequipped = CurrentWeapon.UnequipWeapon();
+			else if (_currentWeapon.isWeaponEnabled == true)
+				WeaponUnequipped = _currentWeapon.UnequipWeapon();
 			else
 				WeaponUnequipped = true;
 
 			if (WeaponUnequipped == true)
 			{
-				var WeaponEquipped = false;
-				var WeaponToEquip = _weapons[_changingWeaponName];
+				bool WeaponEquipped = false;
+				WeaponPoint WeaponToEquip = _weapons[_changingWeaponName];
 			
 				if (WeaponToEquip == null)
 					WeaponEquipped = true;
@@ -295,6 +327,29 @@ public class Player : KinematicBody
 			}
 		}
 	}
+
+	public void ProcessUI(float delta)
+	{
+		//_uiStatusLabel.Text = "FPS: " + Engine.GetFramesPerSecond();
+		if (_currentWeaponName == "UNARMED" || _currentWeaponName == "KNIFE")
+			_uiStatusLabel.Text = "HEALTH: " + Health;
+		else
+		{
+			WeaponPoint _currentWeapon = _weapons[_currentWeaponName];
+			_uiStatusLabel.Text = "HEALTH: " + Health.ToString() + "\nAMMO: " + _currentWeapon.ammoInWeapon.ToString() + "/" + _currentWeapon.spareAmmo.ToString();
+		}
+	}
+
+	public void ProcessReloading(float delta)
+	{
+		if (_reloadingWeapon)
+		{
+			WeaponPoint _currentWeapon = _weapons[_currentWeaponName];
+			if (_currentWeapon != null)
+				_currentWeapon.ReloadWeapon();
+			_reloadingWeapon = false;
+		}
+	}
 	
 	public override void _Input(InputEvent @event)
 	{	
@@ -309,7 +364,7 @@ public class Player : KinematicBody
 
 			Vector3 cameraRot = _rotationHelper.RotationDegrees;
 			// Clamp rotation around x-axis so that player doesn't overturn
-			cameraRot.x = Mathf.Clamp(cameraRot.x, -90, 90);
+			cameraRot.x = Mathf.Clamp(cameraRot.x, -100, 120);
 			_rotationHelper.RotationDegrees = cameraRot;
 		}
 	}
