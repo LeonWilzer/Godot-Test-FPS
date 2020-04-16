@@ -372,7 +372,7 @@ public class Player : KinematicBody
 
 			Vector3 cameraRot = _rotationHelper.RotationDegrees;
 			// Clamp rotation around x-axis so that player doesn't overturn
-			cameraRot.x = Mathf.Clamp(cameraRot.x, -100, 120);
+			cameraRot.x = Mathf.Clamp(cameraRot.x, -90, 90);
 			_rotationHelper.RotationDegrees = cameraRot;
 			if (mouseEvent.ButtonMask == 4 || mouseEvent.ButtonMask == 5)
 			{

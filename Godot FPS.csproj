@@ -64,6 +64,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rifle_Point.cs" />
     <Compile Include="SimpleAudioPlayer.cs" />
+    <Compile Include="Target.cs" />
     <Compile Include="WeaponPoint.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

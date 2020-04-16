@@ -16,6 +16,8 @@ using System;
 
 public class Rifle_Point : WeaponPoint
 {
+    private FuncRef _callback;
+
     // Constructor
     public override void _Ready()
     {
@@ -44,10 +46,14 @@ public class Rifle_Point : WeaponPoint
         
         if (Ray.IsColliding())
         {
-            var body = Ray.GetCollider();
+            var _body = Ray.GetCollider();
             
-            if (body != Playernode)
-                HitTest.BulletHit(body, damage, Ray.GlobalTransform);
+            if (_body != Playernode && _body.HasMethod("BulletHit"))
+            {
+                _callback = GD.FuncRef(_body, "BulletHit");
+                _callback.CallFunc(damage, GlobalTransform);
+                //HitTest.BulletHit(_body, damage, Ray.GlobalTransform);
+            }
         }
 
         Playernode.CreateSound(gunFireSound, GlobalTransform.origin);

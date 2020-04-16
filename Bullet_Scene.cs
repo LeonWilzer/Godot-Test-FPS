@@ -26,6 +26,8 @@ public class Bullet_Scene : Spatial
     private bool _hitSomething;
     private Area _area;
     private float rot;
+    private FuncRef _callback;
+
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
@@ -41,9 +43,8 @@ public class Bullet_Scene : Spatial
         // Get direction of the Bullet
         Vector3 forwardDir = GlobalTransform.basis.z;
 
-        // Rotate bullet around the x-axis s it's affected by Gravity. Warning, can overshoot and get into "orbit", make sure that speed and gravity are high enough until a patch is found
+        // Rotate bullet around the x-axis s it's affected by Gravity. Warning, can overshoot and get into "orbit", make sure that speed is high and that gravity is low enough until a patch is found
         GlobalRotate(GlobalTransform.basis.x.Normalized(), -Gravity*delta);
-        //
         GlobalTranslate(forwardDir * _bulletSpeed * delta);
 
         timer += delta;
@@ -51,10 +52,11 @@ public class Bullet_Scene : Spatial
             QueueFree();
     }
 
+/*
     public void Collided(RigidBody _body)
     {
         if (!_hitSomething)
-             HitTest.BulletHit(_body, _bulletDamage, GlobalTransform);
+            HitTest.BulletHit(_body, _bulletDamage, GlobalTransform);
         _hitSomething = true;
         QueueFree();
     }
@@ -62,15 +64,19 @@ public class Bullet_Scene : Spatial
      public void Collided(KinematicBody _body)
      {
         if (!_hitSomething)
-             HitTest.BulletHit(_body, _bulletDamage, GlobalTransform);
+            HitTest.BulletHit(_body, _bulletDamage, GlobalTransform);
         _hitSomething = true;
         QueueFree();
     }
-
-    public void Collided(StaticBody _body)
+*/
+    public void Collided(PhysicsBody _body)
     {
-        if (!_hitSomething)
-            HitTest.BulletHit(_body, _bulletDamage, GlobalTransform);
+        if (!_hitSomething && _body.HasMethod("BulletHit"))
+        {
+            _callback = GD.FuncRef(_body, "BulletHit");
+            _callback.CallFunc(_bulletDamage, GlobalTransform);
+            //HitTest.BulletHit(_body, _bulletDamage, GlobalTransform);
+        }
         _hitSomething = true;
         QueueFree();
     }

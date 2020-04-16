@@ -16,13 +16,12 @@ using System;
 
 public static class HitTest
 {
-
     private static int _baseBulletBoost = 9;
 
     // Called when the node enters the scene tree for the first time.
     public static void BulletHit(object physical, int Damage, Transform BulletGlobalTrans)
     {
-
+        GD.Print("BulletHit");
         if (physical is RigidBody)
         {
             var _directionVect = BulletGlobalTrans.basis.z.Normalized() * _baseBulletBoost;
