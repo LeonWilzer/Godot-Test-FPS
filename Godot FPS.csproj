@@ -55,6 +55,7 @@
   <ItemGroup>
     <Compile Include="AnimationManager.cs" />
     <Compile Include="Bullet_Scene.cs" />
+    <Compile Include="HealthPickup.cs" />
     <Compile Include="HitTest.cs" />
     <Compile Include="Knife_Point.cs" />
     <Compile Include="Pistol_Point.cs" />

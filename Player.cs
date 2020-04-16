@@ -38,7 +38,8 @@ public class Player : KinematicBody
 	public float SprintAccel = 18.0f;
 	// Character Stats
 	[Export]
-	public float Health = 100;
+	public int Health = 100;
+	private int _maxHealth = 150;
 
 	// Variables relevant for character actions.
 	private bool _isSprinting;
@@ -411,8 +412,16 @@ public class Player : KinematicBody
 		_audioClone.PlaySound(_soundName, position);
 	}
 
+	// Temporary method for play a cock sound at specified times of an animation
+	// WILL BE REPLACED WITH SOMETHING MORE SOPHISTICATED!
 	public void CockGun()
 	{
 		CreateSound(_weapons[_currentWeaponName].gunCockSound,Camera.GlobalTransform.origin);
+	}
+
+	public void AddHealth(int _additionalHealth)
+	{
+		Health += _additionalHealth;
+		Health = Mathf.Clamp(Health, 0, _maxHealth);
 	}
 }
