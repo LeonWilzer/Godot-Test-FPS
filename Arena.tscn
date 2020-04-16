@@ -1,9 +1,10 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Health_Pickup.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Ammo_Pickup.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Target.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Grenade.tscn" type="PackedScene" id=5]
 
 [sub_resource type="CubeMesh" id=1]
 
@@ -46,3 +47,6 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 44.1956, 4.17325, -12.0027 )
 
 [node name="Target_Whole" parent="." instance=ExtResource( 4 )]
 transform = Transform( -0.20996, 0, 0.97771, 0, 1, 0, -0.97771, 0, -0.20996, 55.4771, 8.5959, -2.4908 )
+
+[node name="Grenade" parent="Target_Whole" instance=ExtResource( 5 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 62.5381, 14.0642, -129.182 )

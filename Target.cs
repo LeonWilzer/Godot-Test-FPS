@@ -62,7 +62,6 @@ public class Target : StaticBody
 
     public void BulletHit(int _damage, Transform _bulletTransform)
     {
-        GD.Print("TargetHit");
         _currentHealth -= _damage;
         if (_currentHealth <= 0)
         {

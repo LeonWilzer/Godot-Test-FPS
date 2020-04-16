@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/explosion_large_no_tail_03.wav-37bc7ddebb107d4b47a8469ccb49b48e.sample"
+
+[deps]
+
+source_file="res://assets/audio/sounds/weapons/explosion_large_no_tail_03.wav"
+dest_files=[ "res://.import/explosion_large_no_tail_03.wav-37bc7ddebb107d4b47a8469ccb49b48e.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0
