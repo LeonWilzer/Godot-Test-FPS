@@ -22,20 +22,21 @@ public class Pistol_Point : WeaponPoint
     public override void _Ready()
     {
         damage = 5;
-        idleAnimName = "Pistol_idle";
-        fireAnimName = "Pistol_fire";
+        IdleAnimName = "Pistol_idle";
+        FireAnimName = "Pistol_fire";
         unequipAnimation = "Pistol_unequip";
         equipAnimation = "Pistol_equip";
-        ammoInWeapon = 10;
-        spareAmmo = 20;
-        ammoInMag = 10;
-        isWeaponEnabled = false;
-        canReload = true;
-        canRefill = true;
-        reloadingAnimName = "Pistol_reload";
+        AmmoInWeapon = 10;
+        SpareAmmo = 20;
+        AmmoInMag = 10;
+        IsWeaponEnabled = false;
+        CanReload = true;
+        CanRefill = true;
+        ReloadingAnimName = "Pistol_reload";
         _bulletscene = ResourceLoader.Load<PackedScene>("Bullet_Scene.tscn");
         gunFireSound = "Pistol_shot";
-        gunCockSound = "Gun_cock";
+        GunCockSound = "Gun_cock";
+        MaxAmmo = 50;
     }
 
     public override void FireWeapon()
@@ -47,8 +48,8 @@ public class Pistol_Point : WeaponPoint
         clone.GlobalTransform = GlobalTransform;
         clone.Scale = new Vector3(4, 4, 4);
         clone._bulletDamage = damage;
-        ammoInWeapon--;
-        playernode.CreateSound(gunFireSound, GlobalTransform.origin);
+        AmmoInWeapon--;
+        Playernode.CreateSound(gunFireSound, GlobalTransform.origin);
 
     }
 }

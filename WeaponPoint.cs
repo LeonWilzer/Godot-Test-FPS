@@ -18,44 +18,46 @@ public abstract class WeaponPoint : Spatial
 {
     // Weapon properties
     protected int damage;
+    public int AmmoInMag { get; protected set; }
+    public int MaxAmmo { get; protected set; }
+
 
     // Asset names
-    public string idleAnimName { get; protected set; }
-    public string fireAnimName { get; protected set; }
+    public string IdleAnimName { get; protected set; }
+    public string FireAnimName { get; protected set; }
     protected string unequipAnimation;
     protected string equipAnimation;
-    public string reloadingAnimName { get; protected set; }
-    public string gunCockSound { get; protected set; }
+    public string ReloadingAnimName { get; protected set; }
+    public string GunCockSound { get; protected set; }
     protected string gunFireSound;
 
     // Variables
-    public bool isWeaponEnabled { get; protected set; }
-    public int ammoInWeapon { get; protected set; }
-    public int spareAmmo { get; protected set; }
-    protected int ammoInMag;
-    public bool canReload { get; protected set; }
-    protected bool canRefill;
+    public bool IsWeaponEnabled { get; protected set; }
+    public int AmmoInWeapon { get; protected set; }
+    public int SpareAmmo { get; set; }
+    public bool CanReload { get; protected set; }
+    public bool CanRefill { get; protected set; }
 
     // Nodes
-    public Player playernode { protected get;  set; }
+    public Player Playernode { protected get;  set; }
 
     // Constructor
     public override void _Ready()
     {
-        gunCockSound = "Gun_cock";
+        GunCockSound = "Gun_cock";
     }
 
     public abstract void FireWeapon();
     public bool UnequipWeapon()
     {
-        if ( playernode.AnimationPlayer.CurrentState == idleAnimName)
-            if (playernode.AnimationPlayer.CurrentState != unequipAnimation)
-                playernode.AnimationPlayer.SetAnimation(unequipAnimation);
+        if ( Playernode.AnimationPlayer.CurrentState == IdleAnimName)
+            if (Playernode.AnimationPlayer.CurrentState != unequipAnimation)
+                Playernode.AnimationPlayer.SetAnimation(unequipAnimation);
 
     
-        if (playernode.AnimationPlayer.CurrentState == "Idle_unarmed")
+        if (Playernode.AnimationPlayer.CurrentState == "Idle_unarmed")
         {
-            isWeaponEnabled = false;
+            IsWeaponEnabled = false;
             return true;
         }
         return false;
@@ -63,43 +65,43 @@ public abstract class WeaponPoint : Spatial
 
     public bool EquipWeapon()
     {
-        if ( playernode.AnimationPlayer.CurrentState == idleAnimName)
+        if ( Playernode.AnimationPlayer.CurrentState == IdleAnimName)
         {
-            isWeaponEnabled = true;
+            IsWeaponEnabled = true;
             return true;
         }
 
-        if (playernode.AnimationPlayer.CurrentState == "Idle_unarmed")
-            playernode.AnimationPlayer.SetAnimation(equipAnimation);
+        if (Playernode.AnimationPlayer.CurrentState == "Idle_unarmed")
+            Playernode.AnimationPlayer.SetAnimation(equipAnimation);
         return false;
     }
 
     public bool ReloadWeapon()
     {
-        bool canReload = false;
+        bool CanReload = false;
 
-        if (playernode.AnimationPlayer.CurrentState == idleAnimName)
-            canReload = true;
-        if (spareAmmo <= 0 || ammoInWeapon == ammoInMag)
-            canReload = false;
+        if (Playernode.AnimationPlayer.CurrentState == IdleAnimName)
+            CanReload = true;
+        if (SpareAmmo <= 0 || AmmoInWeapon == AmmoInMag)
+            CanReload = false;
             
-        if (canReload)
+        if (CanReload)
         {
-            int _ammoNeeded = ammoInMag - ammoInWeapon;
+            int _ammoNeeded = AmmoInMag - AmmoInWeapon;
 
-            if (spareAmmo >= _ammoNeeded)
+            if (SpareAmmo >= _ammoNeeded)
             {
-                spareAmmo -= _ammoNeeded;
-                ammoInWeapon = ammoInMag;
+                SpareAmmo -= _ammoNeeded;
+                AmmoInWeapon = AmmoInMag;
             }
             else
             {
-                ammoInWeapon += spareAmmo;
-                spareAmmo = 0;
+                AmmoInWeapon += SpareAmmo;
+                SpareAmmo = 0;
             }
 
-            playernode.AnimationPlayer.SetAnimation(reloadingAnimName);
-            //playernode.CreateSound(gunCockSound, playernode.Camera.GlobalTransform.origin);
+            Playernode.AnimationPlayer.SetAnimation(ReloadingAnimName);
+            //Playernode.CreateSound(GunCockSound, Playernode.Camera.GlobalTransform.origin);
             return true;
         }
         return false;

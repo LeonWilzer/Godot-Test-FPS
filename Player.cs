@@ -93,7 +93,7 @@ public class Player : KinematicBody
 			if (_weapons[Weapon] != null)
 			{
 			WeaponPoint _weaponNode = _weapons[Weapon];
-			_weaponNode.playernode = this;
+			_weaponNode.Playernode = this;
 			// Make Weaponnode point towards the aim position.
 			_weaponNode.LookAt(GunAimPointPos, new Vector3(0,1,0));
 			// Rotate it by 180° on the Y axis.
@@ -234,12 +234,12 @@ public class Player : KinematicBody
 		if (Input.IsActionPressed("fire") && !_changingWeapon && !_reloadingWeapon)
 		{
 			WeaponPoint _currentWeapon = _weapons[_currentWeaponName];
-			if (_currentWeapon != null && _currentWeapon.ammoInWeapon > 0 )
+			if (_currentWeapon != null && _currentWeapon.AmmoInWeapon > 0 )
 			{
-				if (AnimationPlayer.CurrentState == _currentWeapon.idleAnimName)
+				if (AnimationPlayer.CurrentState == _currentWeapon.IdleAnimName)
 				{
 					AnimationPlayer.CallbackFunction = GD.FuncRef(this, nameof(FireBullet));
-					AnimationPlayer.SetAnimation(_currentWeapon.fireAnimName);
+					AnimationPlayer.SetAnimation(_currentWeapon.FireAnimName);
 				}
 			}
 			else
@@ -253,14 +253,14 @@ public class Player : KinematicBody
 		if (!_reloadingWeapon && !_changingWeapon && Input.IsActionJustPressed("reload"))
 		{
 			WeaponPoint _currentWeapon = _weapons[_currentWeaponName];
-			if (_currentWeapon != null && _currentWeapon.canReload)
+			if (_currentWeapon != null && _currentWeapon.CanReload)
 			{
 				string _currentAnimState = AnimationPlayer.CurrentState;
 				bool _isReloading = false;
 				foreach (string _weapon in _weapons.Keys)
 				{
 					WeaponPoint _weaponNode = _weapons[_weapon];
-						if ( _weaponNode != null && _currentAnimState == _weaponNode.reloadingAnimName )
+						if ( _weaponNode != null && _currentAnimState == _weaponNode.ReloadingAnimName )
 							_isReloading = true;
 				}
 				if (!_isReloading)
@@ -309,7 +309,7 @@ public class Player : KinematicBody
 
 			if (_currentWeapon == null)
 				WeaponUnequipped = true;
-			else if (_currentWeapon.isWeaponEnabled == true)
+			else if (_currentWeapon.IsWeaponEnabled == true)
 				WeaponUnequipped = _currentWeapon.UnequipWeapon();
 			else
 				WeaponUnequipped = true;
@@ -321,7 +321,7 @@ public class Player : KinematicBody
 			
 				if (WeaponToEquip == null)
 					WeaponEquipped = true;
-				else if (WeaponToEquip.isWeaponEnabled == false)
+				else if (WeaponToEquip.IsWeaponEnabled == false)
 					WeaponEquipped = WeaponToEquip.EquipWeapon();
 				else
 					WeaponEquipped = true;
@@ -344,7 +344,7 @@ public class Player : KinematicBody
 		else
 		{
 			WeaponPoint _currentWeapon = _weapons[_currentWeaponName];
-			_uiStatusLabel.Text = "HEALTH: " + Health.ToString() + "\nAMMO: " + _currentWeapon.ammoInWeapon.ToString() + "/" + _currentWeapon.spareAmmo.ToString();
+			_uiStatusLabel.Text = "HEALTH: " + Health.ToString() + "\nAMMO: " + _currentWeapon.AmmoInWeapon.ToString() + "/" + _currentWeapon.SpareAmmo.ToString();
 		}
 	}
 
@@ -416,12 +416,23 @@ public class Player : KinematicBody
 	// WILL BE REPLACED WITH SOMETHING MORE SOPHISTICATED!
 	public void CockGun()
 	{
-		CreateSound(_weapons[_currentWeaponName].gunCockSound,Camera.GlobalTransform.origin);
+		CreateSound(_weapons[_currentWeaponName].GunCockSound,Camera.GlobalTransform.origin);
 	}
 
 	public void AddHealth(int _additionalHealth)
 	{
 		Health += _additionalHealth;
 		Health = Mathf.Clamp(Health, 0, _maxHealth);
+	}
+
+	public void AddAmmo(int _additionalAmmo)
+	{
+		if (_currentWeaponName != "UNARMED" && _weapons[_currentWeaponName].CanRefill)
+			foreach (string _weapon in _weapons.Keys)
+				if (_weapon != "UNARMED" && _weapon != "KNIFE")
+				{
+					_weapons[_weapon].SpareAmmo += _weapons[_weapon].AmmoInMag * _additionalAmmo;
+					_weapons[_weapon].SpareAmmo = Mathf.Clamp(_weapons[_weapon].SpareAmmo, 0, _weapons[_weapon].MaxAmmo);
+				}
 	}
 }

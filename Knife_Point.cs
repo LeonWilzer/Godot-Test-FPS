@@ -20,16 +20,17 @@ public class Knife_Point : WeaponPoint
     public override void _Ready()
     {
         damage = 30;
-        idleAnimName = "Knife_idle";
-        fireAnimName = "Knife_fire";
+        IdleAnimName = "Knife_idle";
+        FireAnimName = "Knife_fire";
         unequipAnimation = "Knife_unequip";
         equipAnimation = "Knife_equip";
-        isWeaponEnabled = false;
-        ammoInWeapon = 1;
-        canReload = false;
-        canRefill = false;
-        reloadingAnimName = "null";
+        IsWeaponEnabled = false;
+        AmmoInWeapon = 1;
+        CanReload = false;
+        CanRefill = false;
+        ReloadingAnimName = "null";
         gunFireSound = null;
+        MaxAmmo = 1;
     }
 
     public override void FireWeapon()
@@ -39,7 +40,7 @@ public class Knife_Point : WeaponPoint
 
         foreach (PhysicsBody Body in Bodies)
         {
-            if (Body == playernode)
+            if (Body == Playernode)
                 return;
             HitTest.BulletHit(Body, damage, Area.GlobalTransform);
         }

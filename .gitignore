@@ -369,5 +369,4 @@ export_presets.cfg
 data_*/
 
 ### IDE Code specific ignores
-
 .vscode

@@ -20,35 +20,36 @@ public class Rifle_Point : WeaponPoint
     public override void _Ready()
     {
         damage = 15;
-        idleAnimName = "Rifle_idle";
-        fireAnimName = "Rifle_fire";
+        IdleAnimName = "Rifle_idle";
+        FireAnimName = "Rifle_fire";
         unequipAnimation = "Rifle_unequip";
         equipAnimation = "Rifle_equip";
-        isWeaponEnabled = false;
-        ammoInWeapon = 50;
-        spareAmmo = 100;
-        ammoInMag = 50;
-        canReload = true;
-        canRefill = true;
-        reloadingAnimName = "Rifle_reload";
+        IsWeaponEnabled = false;
+        AmmoInWeapon = 50;
+        SpareAmmo = 100;
+        AmmoInMag = 50;
+        CanReload = true;
+        CanRefill = true;
+        ReloadingAnimName = "Rifle_reload";
         gunFireSound = "Rifle_shot";
-        gunCockSound = "Gun_cock";
+        GunCockSound = "Gun_cock";
+        MaxAmmo = 250;
     }
 
     public override void FireWeapon()
     {
         RayCast Ray = GetNode<RayCast>("Ray_Cast");
         Ray.ForceRaycastUpdate();
-        ammoInWeapon--;
+        AmmoInWeapon--;
         
         if (Ray.IsColliding())
         {
             var body = Ray.GetCollider();
             
-            if (body != playernode)
+            if (body != Playernode)
                 HitTest.BulletHit(body, damage, Ray.GlobalTransform);
         }
 
-        playernode.CreateSound(gunFireSound, GlobalTransform.origin);
+        Playernode.CreateSound(gunFireSound, GlobalTransform.origin);
     }
 }

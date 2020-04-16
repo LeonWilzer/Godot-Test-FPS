@@ -53,6 +53,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AmmoPickup.cs" />
     <Compile Include="AnimationManager.cs" />
     <Compile Include="Bullet_Scene.cs" />
     <Compile Include="HealthPickup.cs" />
