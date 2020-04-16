@@ -355,7 +355,7 @@ MigrationBackup/
 .import/
 
 # Releases
-./Releases
+./releases
 
 # Specific files
 export.cfg
