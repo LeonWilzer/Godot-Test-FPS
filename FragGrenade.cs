@@ -14,7 +14,7 @@ You should have received a copy of the GNU General Public License along with thi
 using Godot;
 using System;
 
-public class StickyGrenade : Grenade
+public abstract class FragGrenade : Grenade
 {
 /*
     private int _grenadeDamage;
@@ -25,72 +25,38 @@ public class StickyGrenade : Grenade
     private float _explosionWaitTime;
     private float _explosionWaitTimer;
 
-    private bool _attached;
-    private Spatial _attachPoint;
-
     private CollisionShape _rigidShape;
     private MeshInstance _grenadeMesh;
     private Area _blastArea;
     private Particles _explosionParticles;
-
-    public Player PlayerBody {get; set;}
-
     private AudioStream _explosionSound;
     private PackedScene _simpleAudioPlayer;
     private FuncRef _callback;
 */
-    private bool _attached;
-    private Spatial _attachPoint;
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
-        _grenadeDamage = 40;
+        _grenadeDamage = 60;
 
-        _grenadeTime = 3;
+        _grenadeTime = 2;
         _grenadeTimer = 0;
 
         _explosionWaitTime = 0.48f;
         _explosionWaitTimer = 0;
 
-        _attached = false;
-
         _rigidShape = GetNode<CollisionShape>("Collision_Shape");
-        _grenadeMesh = GetNode<MeshInstance>("Sticky_Grenade");
+        _grenadeMesh = GetNode<MeshInstance>("Grenade");
         _blastArea = GetNode<Area>("Blast_Area");
         _explosionParticles = GetNode<Particles>("Explosion");
         _simpleAudioPlayer = ResourceLoader.Load<PackedScene>("res://Simple_Audio_Player.tscn");
 
         _explosionParticles.Emitting = false;
         _explosionParticles.OneShot = true;
-
-        GetNode<Area>("Sticky_Area").Connect("body_entered", this, "CollidedWithBody");
-    }
-
-    public void CollidedWithBody(PhysicsBody _body)
-    {
-        if (_body == this)
-            return;
-        if (PlayerBody != null && _body == PlayerBody)
-            return;
-        if (!_attached)
-        {
-            _attached = true;
-            _attachPoint = new Spatial();
-            _body.AddChild(_attachPoint);
-            _attachPoint.GlobalTransform = new Transform(_attachPoint.GlobalTransform.basis, GlobalTransform.origin);
-
-            _rigidShape.Disabled = true;
-
-            Mode = RigidBody.ModeEnum.Static;
-        }
     }
 
     public override void _Process(float delta)
     {
-        if (_attached && _attachPoint != null)
-            GlobalTransform = new Transform(GlobalTransform.basis, _attachPoint.GlobalTransform.origin);
-
         if (_grenadeTimer < _grenadeTime)
         {
             _grenadeTimer += delta;

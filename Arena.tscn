@@ -28,7 +28,7 @@ material/0 = null
 shape = SubResource( 2 )
 
 [node name="Player" parent="." instance=ExtResource( 1 )]
-transform = Transform( -1.62921e-07, 0, -1, 0, 1, 0, 1, 0, -1.62921e-07, 0, 5, 0 )
+transform = Transform( -1.62921e-07, 0, -1, 0, 1, 0, 1, 0, -1.62921e-07, -8.40869, 5, -7.64636 )
 
 [node name="Ball" type="RigidBody" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 30.3016, 7.18979, 2.50879 )
@@ -49,8 +49,8 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 44.1956, 4.17325, -12.0027 )
 [node name="Target_Whole" parent="." instance=ExtResource( 4 )]
 transform = Transform( -0.20996, 0, 0.97771, 0, 1, 0, -0.97771, 0, -0.20996, 55.4771, 8.5959, -2.4908 )
 
-[node name="Grenade" parent="Target_Whole" instance=ExtResource( 5 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 62.5381, 14.0642, -129.182 )
-
 [node name="Sticky_Grenade" parent="." instance=ExtResource( 6 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -72.7627, 36.2518, -71.3931 )
+
+[node name="Grenade" parent="." instance=ExtResource( 5 )]
+transform = Transform( -0.20996, 0, 0.97771, 0, 1, 0, -0.97771, 0, -0.20996, -83.9559, 22.6601, -36.5119 )

@@ -36,11 +36,16 @@ public class Player : KinematicBody
 	public float MaxSprintSpeed = 30.0f;
 	[Export]
 	public float SprintAccel = 18.0f;
+	[Export]
+	public float GrenadeThrowForce = 50f;
+
 	// Character Stats
 	[Export]
 	public int Health = 100;
-	private int _maxHealth = 150;
-
+	[Export]
+	public int MaxHealth = 150;
+	[Export]
+	public int MaxGrenades = 4;
 	// Variables relevant for character actions.
 	private bool _isSprinting;
 	private string _changingWeaponName;
@@ -48,7 +53,11 @@ public class Player : KinematicBody
 	private bool _changingWeapon;
 	private bool _reloadingWeapon;
 	private float _mouseScrollValue;
-	private float _mouseSensitivityScrollWheel = 0.08f;
+	private float _mouseSensitivityScrollWheel;
+	private int _currentGrenade;
+	private int[] _grenadeAmmounts;
+	private string[] _grenadeNames;
+
 
 	// Relevant Nodes.
 	private SpotLight _flashlight;
@@ -59,6 +68,8 @@ public class Player : KinematicBody
 	private Label _uiStatusLabel;
 	public Camera Camera { get; private set; }
 	private Spatial _rotationHelper;
+	private PackedScene _grenadeScene;
+	private PackedScene _stickyGrenadeScene;
 
 	// Dictionaries for weapons.
 	private Dictionary<string, WeaponPoint> _weapons = new Dictionary<string, WeaponPoint>();
@@ -80,6 +91,8 @@ public class Player : KinematicBody
 		_simpleAudioPlayer = ResourceLoader.Load<PackedScene>("res://Simple_Audio_Player.tscn");
 		_uiStatusLabel = GetNode<Label>("HUD/Panel/Gun_label");
 		Vector3 GunAimPointPos = GetNode<Spatial>("Rotation_Helper/Gun_Aim_Point").GlobalTransform.origin;
+		_grenadeScene = ResourceLoader.Load<PackedScene>("res://Grenade.tscn");
+		_stickyGrenadeScene = ResourceLoader.Load<PackedScene>("res://Sticky_Grenade.tscn");
 
 		// Dictionary for Weapon Nodes.
 		_weapons.Add("KNIFE", GetNode<Knife_Point>("Rotation_Helper/Gun_Fire_Points/Knife_Point"));
@@ -118,6 +131,13 @@ public class Player : KinematicBody
 		_currentWeaponName = "UNARMED";
 		_isSprinting = false;
 		_reloadingWeapon = false;
+		_mouseSensitivityScrollWheel = 0.08f;
+		_currentGrenade = 0;
+
+		// Character stats
+		// 0: Frag Grenade 1: Sticky Grenade
+		_grenadeAmmounts = new int[] { 2, 2 };
+		_grenadeNames = new string[] { "Frag Grenade", "Sticky Grenade" };
 
 		// The method being called once an fire animation plays.
 		AnimationPlayer.CallbackFunction = GD.FuncRef(this, nameof(FireBullet));
@@ -267,8 +287,37 @@ public class Player : KinematicBody
 					_reloadingWeapon = true;
 			}
 		}
+		//  -------------------------------------------------------------------
 
 		//  -------------------------------------------------------------------
+		//	Changing and throwing grenades
+
+		if (Input.IsActionJustPressed("change_grenade"))
+		{
+			if (_currentGrenade == 0)
+				_currentGrenade = 1;
+			else if (_currentGrenade == 1)
+				_currentGrenade = 0;
+		}
+
+		if (Input.IsActionJustPressed("fire_grenade") && _grenadeAmmounts[_currentGrenade] > 0)
+		{
+			_grenadeAmmounts[_currentGrenade]--;
+
+			Grenade _grenadeClone;
+			if (_currentGrenade == 0)
+				_grenadeClone = (Grenade)_grenadeScene.Instance();
+			else
+			{
+				_grenadeClone = (StickyGrenade)_stickyGrenadeScene.Instance();
+				// Sticky grenades will stick to the player if we do not pass ourselves
+				_grenadeClone.PlayerBody = this;
+			}
+
+			GetTree().Root.AddChild(_grenadeClone);
+			_grenadeClone.GlobalTransform = GetNode<Spatial>("Rotation_Helper/Grenade_Toss_Pos").GlobalTransform;
+			_grenadeClone.ApplyImpulse(new Vector3(0,0,0), _grenadeClone.GlobalTransform.basis.z * GrenadeThrowForce);
+		}
 	}
 	 private void ProcessMovement(float delta)
 	{
@@ -300,7 +349,7 @@ public class Player : KinematicBody
 		_vel.z = hvel.z;
 		_vel = MoveAndSlide(_vel, new Vector3(0, 1, 0), false, 4, Mathf.Deg2Rad(MaxSlopeAngle = 40.0f));
 	}
-	public void ProcessChangingWeapons(float delta)
+	private void ProcessChangingWeapons(float delta)
 	{
 		if (_changingWeapon == true)
 		{
@@ -336,19 +385,21 @@ public class Player : KinematicBody
 		}
 	}
 
-	public void ProcessUI(float delta)
+	private void ProcessUI(float delta)
 	{
 		//_uiStatusLabel.Text = "FPS: " + Engine.GetFramesPerSecond();
 		if (_currentWeaponName == "UNARMED" || _currentWeaponName == "KNIFE")
-			_uiStatusLabel.Text = "HEALTH: " + Health;
+			_uiStatusLabel.Text = "HEALTH: " + Health + "\n" + _grenadeNames[_currentGrenade] + ": " + _grenadeAmmounts[_currentGrenade]
+			+ "\nFPS: " + Engine.GetFramesPerSecond();
 		else
 		{
 			WeaponPoint _currentWeapon = _weapons[_currentWeaponName];
-			_uiStatusLabel.Text = "HEALTH: " + Health.ToString() + "\nAMMO: " + _currentWeapon.AmmoInWeapon.ToString() + "/" + _currentWeapon.SpareAmmo.ToString();
+			_uiStatusLabel.Text = "HEALTH: " + Health.ToString() + "\nAMMO: " + _currentWeapon.AmmoInWeapon.ToString() + "/" + _currentWeapon.SpareAmmo.ToString()
+			+ "\n" + _grenadeNames[_currentGrenade] + ": " + _grenadeAmmounts[_currentGrenade] + "\nFPS: " + Engine.GetFramesPerSecond();
 		}
 	}
 
-	public void ProcessReloading(float delta)
+	private void ProcessReloading(float delta)
 	{
 		if (_reloadingWeapon)
 		{
@@ -425,7 +476,7 @@ public class Player : KinematicBody
 	public void AddHealth(int _additionalHealth)
 	{
 		Health += _additionalHealth;
-		Health = Mathf.Clamp(Health, 0, _maxHealth);
+		Health = Mathf.Clamp(Health, 0, MaxHealth);
 	}
 
 	public void AddAmmo(int _additionalAmmo)
@@ -437,5 +488,14 @@ public class Player : KinematicBody
 					_weapons[_weapon].SpareAmmo += _weapons[_weapon].AmmoInMag * _additionalAmmo;
 					_weapons[_weapon].SpareAmmo = Mathf.Clamp(_weapons[_weapon].SpareAmmo, 0, _weapons[_weapon].MaxAmmo);
 				}
+	}
+
+	public void AddGrenade(int _additionalGrenades)
+	{
+		for (int i = 0; i<_grenadeAmmounts.Length; i++ )
+		{
+			_grenadeAmmounts[i] += _additionalGrenades;
+			_grenadeAmmounts[i] = Mathf.Clamp(_grenadeAmmounts[i], 0, MaxGrenades);
+		}
 	}
 }

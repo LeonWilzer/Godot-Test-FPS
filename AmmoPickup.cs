@@ -32,7 +32,8 @@ public class AmmoPickup : Spatial
                 _kitSize = value;
         }
     }
-    private int[] _AmmoAmounts;
+    private int[] _ammoAmounts;
+    private int[] _grenadeAmounts;
     private float _respawnTime;
     private float _respawnTimer;
     private bool _isReady;
@@ -41,7 +42,8 @@ public class AmmoPickup : Spatial
     public override void _Ready()
     {
         // 0 = small; 1 = big
-        _AmmoAmounts = new int[] { 1, 4 };
+        _ammoAmounts = new int[] { 1, 4 };
+        _grenadeAmounts = new int[] { 1, 2 };
         _respawnTime = 20;
         _respawnTimer = 0;
         GetNode<Area>("Holder/Ammo_Pickup_Trigger").Connect("body_entered", this, "TriggerBodyEntered");
@@ -78,11 +80,13 @@ public class AmmoPickup : Spatial
         }
     }
 
-    public void TriggerBodyEntered(Player _body)
+    public void TriggerBodyEntered(object _body)
     {
         if (_body is Player)
         {
-            _body.AddAmmo(_AmmoAmounts[KitSize]);
+            Player _player = (Player)_body;
+            _player.AddAmmo(_ammoAmounts[KitSize]);
+            _player.AddGrenade(_grenadeAmounts[KitSize]);
             _respawnTimer = _respawnTime;
             KitSizeChangeValues(KitSize, false);
         }

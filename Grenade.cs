@@ -16,25 +16,27 @@ using System;
 
 public class Grenade : RigidBody
 {
-    private int _grenadeDamage;
+    protected int _grenadeDamage;
 
-    private float _grenadeTime;
-    private float _grenadeTimer;
+    protected float _grenadeTime;
+    protected float _grenadeTimer;
 
-    private float _explosionWaitTime;
-    private float _explosionWaitTimer;
+    protected float _explosionWaitTime;
+    protected float _explosionWaitTimer;
 
-    private CollisionShape _rigidShape;
-    private MeshInstance _grenadeMesh;
-    private Area _blastArea;
-    private Particles _explosionParticles;
-    private AudioStream _explosionSound;
-    private PackedScene _simpleAudioPlayer;
-    private FuncRef _callback;
+    protected CollisionShape _rigidShape;
+    protected MeshInstance _grenadeMesh;
+    protected Area _blastArea;
+    protected Particles _explosionParticles;
+    protected AudioStream _explosionSound;
+    protected PackedScene _simpleAudioPlayer;
+    public Player PlayerBody {get; set;}
+    protected FuncRef _callback;
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
+        /*
         _grenadeDamage = 60;
 
         _grenadeTime = 2;
@@ -51,8 +53,9 @@ public class Grenade : RigidBody
 
         _explosionParticles.Emitting = false;
         _explosionParticles.OneShot = true;
+        */
     }
-
+/*
     public override void _Process(float delta)
     {
         if (_grenadeTimer < _grenadeTime)
@@ -94,4 +97,5 @@ public class Grenade : RigidBody
             }
         }
     }
+*/
 }
