@@ -79,11 +79,12 @@ public class HealthPickup : Spatial
         }
     }
 
-    public void TriggerBodyEntered(Player _body)
+    public void TriggerBodyEntered(object _body)
     {
         if (_body is Player)
         {
-            _body.AddHealth(_healthAmounts[KitSize]);
+            Player _player = (Player)_body;
+            _player.AddHealth(_healthAmounts[KitSize]);
             _respawnTimer = _respawnTime;
             KitSizeChangeValues(KitSize, false);
         }
