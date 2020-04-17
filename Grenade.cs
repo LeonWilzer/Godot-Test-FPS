@@ -82,7 +82,7 @@ public class Grenade : RigidBody
                 SimpleAudioPlayer _audioClone = (SimpleAudioPlayer)_simpleAudioPlayer.Instance();
                 Node _sceneRoot = GetTree().Root.GetChild(0);
 		        _sceneRoot.AddChild(_audioClone);
-		        _audioClone.PlaySound("Explosion", GlobalTransform.origin);
+		        _audioClone.PlaySoundLocal("Explosion", GlobalTransform.origin);
 
                 if (_explosionWaitTimer < _explosionWaitTime)
                 {

@@ -404,19 +404,22 @@ public class Player : KinematicBody
 		_weapons[_currentWeaponName].FireWeapon();
 	}
 
-	public void CreateSound(string _soundName, Vector3 position = new Vector3())
+	public void CreateSound(string _soundName, Vector3 _position = new Vector3())
 	{
 		SimpleAudioPlayer _audioClone = (SimpleAudioPlayer)_simpleAudioPlayer.Instance();
 		Node _sceneRoot = GetTree().Root.GetChild(0);
 		_sceneRoot.AddChild(_audioClone);
-		_audioClone.PlaySound(_soundName, position);
+		if (_position == new Vector3())
+			_audioClone.PlaySoundGlobal(_soundName);
+		else
+			_audioClone.PlaySoundLocal(_soundName, _position);
 	}
 
 	// Temporary method for play a cock sound at specified times of an animation
 	// WILL BE REPLACED WITH SOMETHING MORE SOPHISTICATED!
 	public void CockGun()
 	{
-		CreateSound(_weapons[_currentWeaponName].GunCockSound,Camera.GlobalTransform.origin);
+		CreateSound(_weapons[_currentWeaponName].GunCockSound);
 	}
 
 	public void AddHealth(int _additionalHealth)

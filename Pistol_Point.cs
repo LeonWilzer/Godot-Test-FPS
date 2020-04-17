@@ -49,7 +49,7 @@ public class Pistol_Point : WeaponPoint
         clone.Scale = new Vector3(4, 4, 4);
         clone._bulletDamage = damage;
         AmmoInWeapon--;
-        Playernode.CreateSound(gunFireSound, GlobalTransform.origin);
+        Playernode.CreateSound(gunFireSound);
 
     }
 }

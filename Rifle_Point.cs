@@ -56,6 +56,6 @@ public class Rifle_Point : WeaponPoint
             }
         }
 
-        Playernode.CreateSound(gunFireSound, GlobalTransform.origin);
+        Playernode.CreateSound(gunFireSound);
     }
 }

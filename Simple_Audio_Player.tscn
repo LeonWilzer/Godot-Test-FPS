@@ -9,3 +9,5 @@ script = ExtResource( 1 )
 
 [node name="Audio_Stream_Player" type="AudioStreamPlayer" parent="."]
 stream = SubResource( 1 )
+
+[node name="Audio_Stream_Player_3D" type="AudioStreamPlayer3D" parent="."]
