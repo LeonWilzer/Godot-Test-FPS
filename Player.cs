@@ -13,7 +13,7 @@ You should have received a copy of the GNU General Public License along with thi
 
 using Godot;
 using System;
-using System.Collections.Generic; 
+using System.Collections.Generic;
 
 public class Player : KinematicBody
 {
@@ -46,6 +46,7 @@ public class Player : KinematicBody
 	public int MaxHealth = 150;
 	[Export]
 	public int MaxGrenades = 4;
+
 	// Variables relevant for character actions.
 	private bool _isSprinting;
 	private string _changingWeaponName;
@@ -144,6 +145,8 @@ public class Player : KinematicBody
 
 		// Captures mouse, used as indication that all the variables are assigned.
 		Input.SetMouseMode(Input.MouseMode.Captured);
+
+		Camera.Far = 1000;
 	}
 	
 	public override void _PhysicsProcess(float delta)
@@ -321,7 +324,7 @@ public class Player : KinematicBody
 	}
 	 private void ProcessMovement(float delta)
 	{
-		//_dir.y = 0;
+		_dir.y = 0;
 		_dir = _dir.Normalized();
 
 		_vel.y += delta * Gravity;

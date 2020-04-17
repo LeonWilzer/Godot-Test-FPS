@@ -1,0 +1,50 @@
+[gd_scene load_steps=10 format=2]
+
+[ext_resource path="res://landscape/terrain/data.hterrain" type="Resource" id=1]
+[ext_resource path="res://addons/zylann.hterrain/hterrain.gd" type="Script" id=2]
+[ext_resource path="res://assets/textures/dry_ground_01_ao_1k.png" type="Texture" id=3]
+[ext_resource path="res://Player.tscn" type="PackedScene" id=4]
+[ext_resource path="res://assets/textures/dry_ground_01_nor_1k.png" type="Texture" id=5]
+[ext_resource path="res://assets/textures/dry_ground_01_rough_ao_1k.png" type="Texture" id=6]
+[ext_resource path="res://assets/textures/dry_ground_01_rough_1k.png" type="Texture" id=7]
+
+[sub_resource type="CubeMesh" id=1]
+
+[sub_resource type="BoxShape" id=2]
+
+[node name="Spatial" type="Spatial"]
+
+[node name="HTerrain" type="Spatial" parent="."]
+script = ExtResource( 2 )
+_terrain_data = ExtResource( 1 )
+chunk_size = 32
+shader_type = "Classic4"
+custom_shader = null
+shader_params/u_ground_uv_scale = 20
+shader_params/u_depth_blending = true
+shader_params/u_triplanar = false
+shader_params/u_globalmap_blend_start = null
+shader_params/u_globalmap_blend_distance = null
+ground/albedo_bump_0 = ExtResource( 3 )
+ground/normal_roughness_0 = ExtResource( 5 )
+ground/albedo_bump_1 = ExtResource( 6 )
+ground/normal_roughness_1 = ExtResource( 7 )
+ground/albedo_bump_2 = null
+ground/normal_roughness_2 = null
+ground/albedo_bump_3 = null
+ground/normal_roughness_3 = null
+
+[node name="Player" parent="HTerrain" instance=ExtResource( 4 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 253.014, 32.5815, 70.0994 )
+JumpSpeed = 25.0
+MouseSensitivity = 0.08
+
+[node name="MeshInstance" type="MeshInstance" parent="."]
+transform = Transform( 16.3239, 0.0821424, -13.9702, -11.4906, 0.789907, -7.27667, 12.7293, 0.607701, 11.3468, 290.922, 37.3774, 62.7533 )
+mesh = SubResource( 1 )
+material/0 = null
+
+[node name="StaticBody" type="StaticBody" parent="MeshInstance"]
+
+[node name="CollisionShape" type="CollisionShape" parent="MeshInstance/StaticBody"]
+shape = SubResource( 2 )
