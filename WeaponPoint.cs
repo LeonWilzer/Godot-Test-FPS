@@ -37,6 +37,7 @@ public abstract class WeaponPoint : Spatial
     public int SpareAmmo { get; set; }
     public bool CanReload { get; protected set; }
     public bool CanRefill { get; protected set; }
+    protected FuncRef _callback;
 
     // Nodes
     public Player Playernode { protected get;  set; }

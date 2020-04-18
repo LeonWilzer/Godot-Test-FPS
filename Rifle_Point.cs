@@ -16,8 +16,6 @@ using System;
 
 public class Rifle_Point : WeaponPoint
 {
-    private FuncRef _callback;
-
     // Constructor
     public override void _Ready()
     {

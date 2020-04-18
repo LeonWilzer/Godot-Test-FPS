@@ -35,14 +35,15 @@ public class Knife_Point : WeaponPoint
 
     public override void FireWeapon()
     {
-        Area Area = GetNode<Area>("Area");
-        var Bodies = Area.GetOverlappingBodies();
+        Area _area = GetNode<Area>("Area");
+        Godot.Collections.Array Bodies = _area.GetOverlappingBodies();
 
-        foreach (PhysicsBody Body in Bodies)
+        foreach (PhysicsBody _body in Bodies)
         {
-            if (Body == Playernode)
+            if (!(_body is RigidBody))
                 return;
-            HitTest.BulletHit(Body, damage, Area.GlobalTransform);
+            _callback = GD.FuncRef(_body, "BulletHit");
+            _callback.CallFunc(damage, _area.GlobalTransform);
         }
     }
 }

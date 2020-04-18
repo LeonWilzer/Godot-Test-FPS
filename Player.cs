@@ -39,7 +39,7 @@ public class Player : KinematicBody
 	[Export]
 	public float GrenadeThrowForce = 50f;
 	[Export]
-	public float ObjectThrowForce = 120;
+	public float ObjectThrowForce = 60;
 	public float ObjectGrabDistance = 7;
 	public float ObjectGrabRayDistance = 10;
 
@@ -549,5 +549,11 @@ public class Player : KinematicBody
 			_grenadeAmmounts[i] += _additionalGrenades;
 			_grenadeAmmounts[i] = Mathf.Clamp(_grenadeAmmounts[i], 0, MaxGrenades);
 		}
+	}
+
+	public void BulletHit(int _damage)
+	{
+		Health -= _damage;
+		Health = Mathf.Clamp(Health, 0, MaxHealth);
 	}
 }

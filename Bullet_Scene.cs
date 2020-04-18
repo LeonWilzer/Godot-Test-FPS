@@ -52,30 +52,12 @@ public class Bullet_Scene : Spatial
             QueueFree();
     }
 
-/*
-    public void Collided(RigidBody _body)
-    {
-        if (!_hitSomething)
-            HitTest.BulletHit(_body, _bulletDamage, GlobalTransform);
-        _hitSomething = true;
-        QueueFree();
-    }
-
-     public void Collided(KinematicBody _body)
-     {
-        if (!_hitSomething)
-            HitTest.BulletHit(_body, _bulletDamage, GlobalTransform);
-        _hitSomething = true;
-        QueueFree();
-    }
-*/
     public void Collided(PhysicsBody _body)
     {
         if (!_hitSomething && _body.HasMethod("BulletHit"))
         {
             _callback = GD.FuncRef(_body, "BulletHit");
             _callback.CallFunc(_bulletDamage, GlobalTransform);
-            //HitTest.BulletHit(_body, _bulletDamage, GlobalTransform);
         }
         _hitSomething = true;
         QueueFree();

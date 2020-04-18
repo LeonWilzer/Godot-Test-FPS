@@ -78,7 +78,7 @@ public abstract class FragGrenade : Grenade
                     if (_body.HasMethod("BulletHit"))
                     {
                         _callback = GD.FuncRef(_body, "BulletHit");
-                        _callback.CallFunc();
+                        _callback.CallFunc(_grenadeDamage, _blastArea.GlobalTransform);
                     }
 
                 SimpleAudioPlayer _audioClone = (SimpleAudioPlayer)_simpleAudioPlayer.Instance();

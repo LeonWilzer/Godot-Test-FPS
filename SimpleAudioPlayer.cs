@@ -38,6 +38,7 @@ public class SimpleAudioPlayer : Spatial
         _audioNodeGlobal.MixTarget = AudioStreamPlayer.MixTargetEnum.Surround;
         _audioNodeLocal.Connect("finished", this, "DestroySelf3D");
         _audioNodeLocal.Stop();
+        _audioNodeLocal.AttenuationFilterDb = -6;
         _audioNodeLocal.MaxDb = 20;
     }
 

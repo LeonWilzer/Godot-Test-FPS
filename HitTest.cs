@@ -14,25 +14,20 @@ You should have received a copy of the GNU General Public License along with thi
 using Godot;
 using System;
 
-public static class HitTest
+public  class HitTest : RigidBody
 {
-    private static int _baseBulletBoost = 9;
+    private  int _baseBulletBoost;
+
+    public override void _Ready()
+    {
+        _baseBulletBoost = 9;
+    }
 
     // Called when the node enters the scene tree for the first time.
-    public static void BulletHit(object physical, int Damage, Transform BulletGlobalTrans)
+    public  void BulletHit(int _damage, Transform BulletGlobalTrans)
     {
         GD.Print("BulletHit");
-        if (physical is RigidBody)
-        {
-            var _directionVect = BulletGlobalTrans.basis.z.Normalized() * _baseBulletBoost;
-            RigidBody rigidbody = (RigidBody)physical;
-            rigidbody.ApplyImpulse((BulletGlobalTrans.origin - rigidbody.GlobalTransform.origin).Normalized(), _directionVect * Damage);
-        }
-        /*
-        else if (physical is StaticBody)
-            GD.Print("StaticBody hit");
-        else if (physical is KinematicBody)
-            GD.Print("KinematicBody hit");
-        */
+        Vector3 _directionVect = BulletGlobalTrans.basis.z.Normalized() * _baseBulletBoost;
+        ApplyImpulse((BulletGlobalTrans.origin - GlobalTransform.origin).Normalized(), _directionVect * _damage);
     }
 }
