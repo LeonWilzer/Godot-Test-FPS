@@ -38,6 +38,10 @@ public class Player : KinematicBody
 	public float SprintAccel = 18.0f;
 	[Export]
 	public float GrenadeThrowForce = 50f;
+	[Export]
+	public float ObjectThrowForce = 120;
+	public float ObjectGrabDistance = 7;
+	public float ObjectGrabRayDistance = 10;
 
 	// Character Stats
 	[Export]
@@ -58,6 +62,8 @@ public class Player : KinematicBody
 	private int _currentGrenade;
 	private int[] _grenadeAmmounts;
 	private string[] _grenadeNames;
+	private object _grabbedObject;
+	private RigidBody _grabbedRigid;
 
 	// Relevant Nodes.
 	private SpotLight _flashlight;
@@ -150,9 +156,12 @@ public class Player : KinematicBody
 	{
 		ProcessInput(delta);
 		ProcessMovement(delta);
+		if (_grabbedObject == null)
+		{
 		ProcessChangingWeapons(delta);
-		ProcessUI(delta);
 		ProcessReloading(delta);
+		}
+		ProcessUI(delta);
 	}
 	
 	private void ProcessInput(float delta)
@@ -315,6 +324,53 @@ public class Player : KinematicBody
 			_grenadeClone.GlobalTransform = GetNode<Spatial>("Rotation_Helper/Grenade_Toss_Pos").GlobalTransform;
 			_grenadeClone.ApplyImpulse(new Vector3(0,0,0), _grenadeClone.GlobalTransform.basis.z * GrenadeThrowForce);
 		}
+		//  -------------------------------------------------------------------
+
+		//  -------------------------------------------------------------------
+		//	Grabbing and throwing objects
+		if (Input.IsActionJustPressed("fire") && _currentWeaponName == "UNARMED")
+			if (_grabbedObject == null)
+			{
+				PhysicsDirectSpaceState _state = GetWorld().DirectSpaceState;
+
+				Vector2 _centerPosition = GetViewport().Size / 2;
+				Vector3 _rayFrom = Camera.ProjectRayOrigin(_centerPosition);
+				Vector3 _rayTo = _rayFrom + Camera.ProjectRayNormal(_centerPosition) * ObjectGrabRayDistance;
+				Godot.Collections.Array _exclude = new Godot.Collections.Array();
+				_exclude.Add(this);
+				_exclude.Add(GetNode<Area>("Rotation_Helper/Gun_Fire_Points/Knife_Point/Area"));
+				Godot.Collections.Dictionary _rayResult = _state.IntersectRay(_rayFrom, _rayTo, _exclude);
+				if (_rayResult.Count != 0 && _rayResult["collider"] is RigidBody)
+				{
+					_grabbedObject = _rayResult["collider"];
+					RigidBody _grabbedRigid = (RigidBody)_grabbedObject;
+					_grabbedRigid.Mode = RigidBody.ModeEnum.Static;
+
+					_grabbedRigid.CollisionLayer = 0;
+					_grabbedRigid.CollisionMask = 0;
+				}
+			}
+			else
+			{
+				_grabbedRigid = (RigidBody)_grabbedObject;
+
+				_grabbedRigid.Mode = RigidBody.ModeEnum.Rigid;
+
+				_grabbedRigid.ApplyImpulse(new Vector3(0,0,0), -Camera.GlobalTransform.basis.z.Normalized() * ObjectThrowForce);
+
+				_grabbedRigid.CollisionLayer = 1;
+				_grabbedRigid.CollisionMask = 1;
+
+				_grabbedRigid = null;
+				_grabbedObject = null;
+			}
+		if (_grabbedObject != null)
+		{
+			_grabbedRigid = (RigidBody)_grabbedObject;
+			Transform _transform = new Transform(_grabbedRigid.GlobalTransform.basis, Camera.GlobalTransform.origin + (-Camera.GlobalTransform.basis.z.Normalized() * ObjectGrabDistance));
+			_grabbedRigid.GlobalTransform = _transform;
+		}
+		//  -------------------------------------------------------------------
 	}
 	 private void ProcessMovement(float delta)
 	{

@@ -52,7 +52,6 @@ public class Rifle_Point : WeaponPoint
             {
                 _callback = GD.FuncRef(_body, "BulletHit");
                 _callback.CallFunc(damage, GlobalTransform);
-                //HitTest.BulletHit(_body, damage, Ray.GlobalTransform);
             }
         }
 

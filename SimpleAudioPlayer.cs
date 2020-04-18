@@ -35,8 +35,10 @@ public class SimpleAudioPlayer : Spatial
         _audioNodeLocal = GetNode<AudioStreamPlayer3D>("Audio_Stream_Player_3D");
         _audioNodeGlobal.Connect("finished", this, "DestroySelfGlobal");
         _audioNodeGlobal.Stop();
+        _audioNodeGlobal.MixTarget = AudioStreamPlayer.MixTargetEnum.Surround;
         _audioNodeLocal.Connect("finished", this, "DestroySelf3D");
         _audioNodeLocal.Stop();
+        _audioNodeLocal.MaxDb = 20;
     }
 
     public void PlaySoundGlobal(string _soundName)
@@ -93,7 +95,9 @@ public class SimpleAudioPlayer : Spatial
                 _audioNodeLocal.Stream = _audioGunCock;
                 break;
             case "Explosion":
+                _audioNodeLocal.UnitDb = 20;
                 _audioNodeLocal.Stream = _explosionSound;
+                _audioNodeLocal.UnitDb = 0;
                 break;
             default:
                 GD.Print("UNKOWN STREAM");
