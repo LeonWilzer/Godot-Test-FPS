@@ -19,11 +19,11 @@ public class Player : KinematicBody
 {
 	// Engine Properties
 	[Export]
-	public float Gravity = -24.8f;
+	public float Gravity = -50f;
 	[Export]
 	public float MaxSpeed = 20.0f;
 	[Export]
-	public float JumpSpeed = 18.0f;
+	public float JumpSpeed = 25f;
 	[Export]
 	public float Accel = 4.5f;
 	[Export]
@@ -58,7 +58,6 @@ public class Player : KinematicBody
 	private int _currentGrenade;
 	private int[] _grenadeAmmounts;
 	private string[] _grenadeNames;
-
 
 	// Relevant Nodes.
 	private SpotLight _flashlight;
@@ -145,8 +144,6 @@ public class Player : KinematicBody
 
 		// Captures mouse, used as indication that all the variables are assigned.
 		Input.SetMouseMode(Input.MouseMode.Captured);
-
-		Camera.Far = 1000;
 	}
 	
 	public override void _PhysicsProcess(float delta)
@@ -185,11 +182,8 @@ public class Player : KinematicBody
 
 		//  -------------------------------------------------------------------
 		//  Jumping
-		if (IsOnFloor())
-		{
-			if (Input.IsActionJustPressed("movement_jump"))
+		if (IsOnFloor() && Input.IsActionJustPressed("movement_jump"))
 				_vel.y = JumpSpeed;
-		}
 		//  -------------------------------------------------------------------
 
 		//  -------------------------------------------------------------------
@@ -328,7 +322,6 @@ public class Player : KinematicBody
 		_dir = _dir.Normalized();
 
 		_vel.y += delta * Gravity;
-
 		Vector3 hvel = _vel;
 		hvel.y = 0;
 
@@ -350,7 +343,7 @@ public class Player : KinematicBody
 		hvel = hvel.LinearInterpolate(target, accel * delta);
 		_vel.x = hvel.x;
 		_vel.z = hvel.z;
-		_vel = MoveAndSlide(_vel, new Vector3(0, 1, 0), false, 4, Mathf.Deg2Rad(MaxSlopeAngle = 40.0f));
+		_vel = MoveAndSlide(_vel, new Vector3(0, 1, 0), true, 4, Mathf.Deg2Rad(MaxSlopeAngle));
 	}
 	private void ProcessChangingWeapons(float delta)
 	{
@@ -426,7 +419,7 @@ public class Player : KinematicBody
 
 			Vector3 cameraRot = _rotationHelper.RotationDegrees;
 			// Clamp rotation around x-axis so that player doesn't overturn
-			cameraRot.x = Mathf.Clamp(cameraRot.x, -90, 90);
+			cameraRot.x = Mathf.Clamp(cameraRot.x, -89, 89);
 			_rotationHelper.RotationDegrees = cameraRot;
 			if (mouseEvent.ButtonMask == 4 || mouseEvent.ButtonMask == 5)
 			{

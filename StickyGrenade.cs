@@ -16,29 +16,6 @@ using System;
 
 public class StickyGrenade : Grenade
 {
-/*
-    private int _grenadeDamage;
-
-    private float _grenadeTime;
-    private float _grenadeTimer;
-
-    private float _explosionWaitTime;
-    private float _explosionWaitTimer;
-
-    private bool _attached;
-    private Spatial _attachPoint;
-
-    private CollisionShape _rigidShape;
-    private MeshInstance _grenadeMesh;
-    private Area _blastArea;
-    private Particles _explosionParticles;
-
-    public Player PlayerBody {get; set;}
-
-    private AudioStream _explosionSound;
-    private PackedScene _simpleAudioPlayer;
-    private FuncRef _callback;
-*/
     private bool _attached;
     private Spatial _attachPoint;
 

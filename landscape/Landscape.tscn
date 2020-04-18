@@ -14,6 +14,12 @@
 
 [node name="Spatial" type="Spatial"]
 
+[node name="Player" parent="." instance=ExtResource( 4 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 253.014, 32.5815, 70.0994 )
+MaxSpeed = 20.0
+JumpSpeed = 25.0
+MaxSlopeAngle = 89.0
+
 [node name="HTerrain" type="Spatial" parent="."]
 script = ExtResource( 2 )
 _terrain_data = ExtResource( 1 )
@@ -34,17 +40,38 @@ ground/normal_roughness_2 = null
 ground/albedo_bump_3 = null
 ground/normal_roughness_3 = null
 
-[node name="Player" parent="HTerrain" instance=ExtResource( 4 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 253.014, 32.5815, 70.0994 )
-JumpSpeed = 25.0
-MouseSensitivity = 0.08
-
 [node name="MeshInstance" type="MeshInstance" parent="."]
 transform = Transform( 16.3239, 0.0821424, -13.9702, -11.4906, 0.789907, -7.27667, 12.7293, 0.607701, 11.3468, 290.922, 37.3774, 62.7533 )
 mesh = SubResource( 1 )
 material/0 = null
 
 [node name="StaticBody" type="StaticBody" parent="MeshInstance"]
+transform = Transform( 1, 9.31323e-10, 0, 4.76837e-07, 1, 4.76837e-07, 2.98023e-08, 1.86265e-09, 1, 0, 0, 0 )
 
 [node name="CollisionShape" type="CollisionShape" parent="MeshInstance/StaticBody"]
+transform = Transform( 1, 9.31323e-10, 0, 4.76837e-07, 1, 4.76837e-07, 2.98023e-08, 1.86265e-09, 1, 0, 0, 0 )
+shape = SubResource( 2 )
+
+[node name="MeshInstance2" type="MeshInstance" parent="."]
+transform = Transform( 16.2049, -0.18209, -13.7046, 2.61672, 0.983032, -2.84205, 17.0614, 0.0221803, 13.4526, 220.079, 25.9865, 63.8853 )
+mesh = SubResource( 1 )
+material/0 = null
+
+[node name="StaticBody" type="StaticBody" parent="MeshInstance2"]
+transform = Transform( 1, 9.31323e-10, 0, 4.76837e-07, 1, 4.76837e-07, 2.98023e-08, 1.86265e-09, 1, 0, 0, 0 )
+
+[node name="CollisionShape" type="CollisionShape" parent="MeshInstance2/StaticBody"]
+transform = Transform( 1, 7.567e-10, 2.98023e-08, 4.17233e-07, 1, 5.36442e-07, 0, 1.86265e-09, 1, 0, 0, 0 )
+shape = SubResource( 2 )
+
+[node name="MeshInstance3" type="MeshInstance" parent="."]
+transform = Transform( 23.6757, 0, 0, 0, 1, 0, 0, 0, 19.413, 159.576, 8.03704, 64.3466 )
+mesh = SubResource( 1 )
+material/0 = null
+
+[node name="StaticBody" type="StaticBody" parent="MeshInstance3"]
+transform = Transform( 1, 9.31323e-10, 0, 4.76837e-07, 1, 4.76837e-07, 2.98023e-08, 1.86265e-09, 1, 0, 0, 0 )
+
+[node name="CollisionShape" type="CollisionShape" parent="MeshInstance3/StaticBody"]
+transform = Transform( 1, 7.567e-10, 2.98023e-08, 4.17233e-07, 1, 5.36442e-07, 0, 1.86265e-09, 1, 0, 0, 0 )
 shape = SubResource( 2 )

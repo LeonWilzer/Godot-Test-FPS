@@ -164,7 +164,6 @@ Weapon4={
 
 [rendering]
 
-threads/thread_model=2
 quality/shadows/filter_mode=2
 quality/subsurface_scattering/quality=2
 quality/subsurface_scattering/follow_surface=true
