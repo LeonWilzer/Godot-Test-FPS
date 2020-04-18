@@ -14,25 +14,24 @@ You should have received a copy of the GNU General Public License along with thi
 using Godot;
 using System;
 
-public class Bullet_Scene : Spatial
+public class BulletScene : Spatial
 {
     [Export]
-    public float Gravity = -5;
+    public float Gravity = -1;
     [Export]
-    public int _bulletSpeed = 100;
+    public int _bulletSpeed = 250;
     public int _bulletDamage { get; set; }
     private int _killTimer;
     private float timer;
     private bool _hitSomething;
     private Area _area;
-    private float rot;
     private FuncRef _callback;
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
         _bulletDamage = 15;
-        _killTimer = 4;
+        _killTimer = 1;
         timer = 0;
         _hitSomething = false;
         _area = GetNode<Area>("Area");

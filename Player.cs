@@ -148,6 +148,7 @@ public class Player : KinematicBody
 		// The method being called once an fire animation plays.
 		AnimationPlayer.CallbackFunction = GD.FuncRef(this, nameof(FireBullet));
 
+		Camera.Far = 1000;
 		// Captures mouse, used as indication that all the variables are assigned.
 		Input.SetMouseMode(Input.MouseMode.Captured);
 	}
@@ -551,7 +552,7 @@ public class Player : KinematicBody
 		}
 	}
 
-	public void BulletHit(int _damage)
+	public void BulletHit(int _damage, Transform _bulletGlobalTrans)
 	{
 		Health -= _damage;
 		Health = Mathf.Clamp(Health, 0, MaxHealth);

@@ -1,7 +1,8 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://assets/Gamemode_Objects/Metal_Two.material" type="Material" id=1]
 [ext_resource path="res://assets/Gamemode_Objects/Emissive_Orange.material" type="Material" id=2]
+[ext_resource path="res://HitTest.cs" type="Script" id=3]
 
 [sub_resource type="ArrayMesh" id=1]
 resource_name = "Cube.052"
@@ -170,6 +171,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.431274, 1.68556, 0 )
 mass = 14.0
 gravity_scale = 2.0
 can_sleep = false
+script = ExtResource( 3 )
 
 [node name="Target_Broken_Piece" type="MeshInstance" parent="Rigid_Body_One"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.322653, 0.155333, 0 )
@@ -186,6 +188,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1.56946, -0.483896, 0 )
 mass = 14.0
 gravity_scale = 2.0
 can_sleep = false
+script = ExtResource( 3 )
 
 [node name="Target_Broken_Piece_2" type="MeshInstance" parent="Rigid_Body_Two"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.29034, -0.261614, 0 )
@@ -202,6 +205,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.906632, -1.20461, 0 )
 mass = 14.0
 gravity_scale = 2.0
 can_sleep = false
+script = ExtResource( 3 )
 
 [node name="Target_Broken_Piece_3" type="MeshInstance" parent="Rigid_Body_Three"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.162274, -0.377417, 0 )
@@ -218,6 +222,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.51507, 0.920809, 0 )
 mass = 14.0
 gravity_scale = 2.0
 can_sleep = false
+script = ExtResource( 3 )
 
 [node name="Target_Broken_Piece_4" type="MeshInstance" parent="Rigid_Body_Four"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.270636, 0.26173, 0 )
@@ -233,6 +238,7 @@ shape = SubResource( 8 )
 mass = 14.0
 gravity_scale = 2.0
 can_sleep = false
+script = ExtResource( 3 )
 
 [node name="Target_Broken_Mid" type="MeshInstance" parent="Rigid_Body_Five"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5.96046e-08, 0 )

@@ -55,7 +55,7 @@
   <ItemGroup>
     <Compile Include="AmmoPickup.cs" />
     <Compile Include="AnimationManager.cs" />
-    <Compile Include="Bullet_Scene.cs" />
+    <Compile Include="BulletScene.cs" />
     <Compile Include="FragGrenade.cs" />
     <Compile Include="Grenade.cs" />
     <Compile Include="HealthPickup.cs" />
@@ -68,6 +68,8 @@
     <Compile Include="SimpleAudioPlayer.cs" />
     <Compile Include="StickyGrenade.cs" />
     <Compile Include="Target.cs" />
+    <Compile Include="Turret.cs" />
+    <Compile Include="TurretBody.cs" />
     <Compile Include="WeaponPoint.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

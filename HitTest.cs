@@ -24,10 +24,9 @@ public  class HitTest : RigidBody
     }
 
     // Called when the node enters the scene tree for the first time.
-    public  void BulletHit(int _damage, Transform BulletGlobalTrans)
+    public  void BulletHit(int _damage, Transform _bulletGlobalTrans)
     {
-        GD.Print("BulletHit");
-        Vector3 _directionVect = BulletGlobalTrans.basis.z.Normalized() * _baseBulletBoost;
-        ApplyImpulse((BulletGlobalTrans.origin - GlobalTransform.origin).Normalized(), _directionVect * _damage);
+        Vector3 _directionVect = _bulletGlobalTrans.basis.z.Normalized() * _baseBulletBoost;
+        ApplyImpulse((_bulletGlobalTrans.origin - GlobalTransform.origin).Normalized(), _directionVect * _damage);
     }
 }

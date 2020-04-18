@@ -41,7 +41,7 @@ public class Pistol_Point : WeaponPoint
 
     public override void FireWeapon()
     {
-        Bullet_Scene clone = (Bullet_Scene)_bulletscene.Instance();
+        BulletScene clone = (BulletScene)_bulletscene.Instance();
         Node sceneRoot = GetTree().Root.GetChild(0);
         sceneRoot.AddChild(clone);
 
