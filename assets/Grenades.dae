@@ -211,7 +211,7 @@
 </library_geometries>
 <library_visual_scenes>
 	<visual_scene id="id-scene-1" name="scene">
-		<node id="Grenade" name="Grenade" type="NODE">
+		<node id="FragGrenade" name="FragGrenade" type="NODE">
 			<matrix sid="transform"> 1.0 0.0 0.0 -0.924007773399353 0.0 1.0 0.0 -4.013896465301514 0.0 0.0 1.0 8.948931694030762 0.0 0.0 0.0 1.0  </matrix>
 			<instance_geometry url="#id-mesh-9">
 				<bind_material>
