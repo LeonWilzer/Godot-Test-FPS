@@ -47,7 +47,7 @@ public class Pistol : Weapon
 
         clone.GlobalTransform = GlobalTransform;
         clone.Scale = new Vector3(4, 4, 4);
-        clone._bulletDamage = damage;
+        clone.BulletDamage = damage;
         AmmoInWeapon--;
         Playernode.CreateSound(gunFireSound);
 

@@ -57,8 +57,12 @@
     <Compile Include="common\audioplayer\SimpleAudioPlayer.cs" />
     <Compile Include="common\Hit.cs" />
     <Compile Include="objects\doors\sliding\SlidingDoors.cs" />
+    <Compile Include="objects\target\Target.cs" />
+    <Compile Include="pickupables\kits\ammo\AmmoPickup.cs" />
+    <Compile Include="pickupables\kits\health\HealthPickup.cs" />
     <Compile Include="player\Player.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ui\menus\mainmenu\MainMenu.cs" />
     <Compile Include="weaponry\bullets\standard\StandardBullet.cs" />
     <Compile Include="weaponry\grenades\frag\FragGrenade.cs" />
     <Compile Include="weaponry\grenades\Grenade.cs" />
@@ -67,6 +71,8 @@
     <Compile Include="weaponry\playerweapons\Pistol.cs" />
     <Compile Include="weaponry\playerweapons\Rifle.cs" />
     <Compile Include="weaponry\playerweapons\Weapon.cs" />
+    <Compile Include="weaponry\turret\Turret.cs" />
+    <Compile Include="weaponry\turret\TurretBody.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

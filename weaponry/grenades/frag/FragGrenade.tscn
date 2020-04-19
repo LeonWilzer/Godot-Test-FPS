@@ -5,7 +5,6 @@
 [ext_resource path="res://assets/Gun_Emission.material" type="Material" id=3]
 [ext_resource path="res://weaponry/grenades/frag/FragGrenade.cs" type="Script" id=4]
 
-
 [sub_resource type="PhysicsMaterial" id=1]
 bounce = 0.3
 

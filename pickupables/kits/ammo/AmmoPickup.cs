@@ -42,8 +42,8 @@ public class AmmoPickup : Spatial
     public override void _Ready()
     {
         // 0 = small; 1 = big
-        _ammoAmounts = new int[] { 1, 4 };
-        _grenadeAmounts = new int[] { 1, 2 };
+        _ammoAmounts = new int[] { 1, 5 };
+        _grenadeAmounts = new int[] { 1, 4 };
         _respawnTime = 20;
         _respawnTimer = 0;
         GetNode<Area>("Holder/Ammo_Pickup_Trigger").Connect("body_entered", this, "TriggerBodyEntered");

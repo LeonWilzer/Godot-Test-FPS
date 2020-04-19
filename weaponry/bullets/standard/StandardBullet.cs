@@ -19,8 +19,8 @@ public class StandardBullet : Spatial
     [Export]
     public float Gravity = -1;
     [Export]
-    public int _bulletSpeed = 250;
-    public int _bulletDamage { get; set; }
+    public int BulletSpeed = 250;
+    public int BulletDamage { get; set; }
     private int _killTimer;
     private float timer;
     private bool _hitSomething;
@@ -30,8 +30,8 @@ public class StandardBullet : Spatial
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
-        _bulletDamage = 15;
-        _killTimer = 1;
+        BulletDamage = 15;
+        _killTimer = 4;
         timer = 0;
         _hitSomething = false;
         _area = GetNode<Area>("Area");
@@ -44,7 +44,7 @@ public class StandardBullet : Spatial
 
         // Rotate bullet around the x-axis s it's affected by Gravity. Warning, can overshoot and get into "orbit", make sure that speed is high and that gravity is low enough until a patch is found
         GlobalRotate(GlobalTransform.basis.x.Normalized(), -Gravity*delta);
-        GlobalTranslate(forwardDir * _bulletSpeed * delta);
+        GlobalTranslate(forwardDir * BulletSpeed * delta);
 
         timer += delta;
         if (timer >= _killTimer)
@@ -56,7 +56,7 @@ public class StandardBullet : Spatial
         if (!_hitSomething && _body.HasMethod("BulletHit"))
         {
             _callback = GD.FuncRef(_body, "BulletHit");
-            _callback.CallFunc(_bulletDamage, GlobalTransform);
+            _callback.CallFunc(BulletDamage, GlobalTransform);
         }
         _hitSomething = true;
         QueueFree();

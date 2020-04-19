@@ -84,7 +84,7 @@ public class Turret : Spatial
         _destroyedTime = 20;
         _destroyedTimer = 0;
 
-        _bulletScene = ResourceLoader.Load<PackedScene>("StandardBullet.tscn");
+        _bulletScene = ResourceLoader.Load<PackedScene>("res://weaponry/bullets/standard/StandardBullet.tscn");
 
         GetNode<Area>("Vision_Area").Connect("body_entered", this, "BodyEnteredVision");
         GetNode<Area>("Vision_Area").Connect("body_exited", this, "BodyExitedVision");
@@ -177,9 +177,10 @@ public class Turret : Spatial
             _sceneRoot.AddChild(_clone);
 
             _clone.GlobalTransform = GetNode<Spatial>("Head/Barrel_End").GlobalTransform;
-            _clone.Scale = new Vector3(8,8,8);
-            _clone._bulletDamage = _TurretDamageBullet;
-            _clone._bulletSpeed = 50;
+            _clone.Scale = new Vector3(10,10,5);
+            _clone.BulletDamage = _TurretDamageBullet;
+            _clone.BulletSpeed = 5;
+            _clone.Gravity = -0.1f;
 
             _ammoInTurret--;
         }

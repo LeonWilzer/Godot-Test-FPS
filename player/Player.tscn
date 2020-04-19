@@ -15,11 +15,6 @@
 [ext_resource path="res://weaponry/playerweapons/Pistol.cs" type="Script" id=13]
 [ext_resource path="res://weaponry/playerweapons/Weapon.cs" type="Script" id=14]
 
-
-
-
-
-
 [sub_resource type="CapsuleShape" id=1]
 radius = 1.2901
 height = 9.0

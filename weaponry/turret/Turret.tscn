@@ -5,8 +5,8 @@
 [ext_resource path="res://assets/Gamemode_Objects/Emissive_Orange.material" type="Material" id=3]
 [ext_resource path="res://assets/Gamemode_Objects/Metal_Three.material" type="Material" id=4]
 [ext_resource path="res://assets/Gamemode_Objects/Emissive_White.material" type="Material" id=5]
-[ext_resource path="res://Turret.cs" type="Script" id=6]
-[ext_resource path="res://TurretBody.cs" type="Script" id=7]
+[ext_resource path="res://weaponry/turret/Turret.cs" type="Script" id=6]
+[ext_resource path="res://weaponry/turret/TurretBody.cs" type="Script" id=7]
 
 [sub_resource type="ArrayMesh" id=1]
 resource_name = "Cube.047"
@@ -156,7 +156,7 @@ extents = Vector3( 1.85373, 1.33713, 3.24662 )
 extents = Vector3( 1, 2.17965, 0.672486 )
 
 [sub_resource type="SphereShape" id=8]
-radius = 36.0
+radius = 64.0
 
 [sub_resource type="ParticlesMaterial" id=9]
 emission_shape = 1

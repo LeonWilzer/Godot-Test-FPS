@@ -2,7 +2,8 @@
 
 [ext_resource path="res://assets/Gamemode_Objects/Metal_Two.material" type="Material" id=1]
 [ext_resource path="res://assets/Gamemode_Objects/Emissive_Orange.material" type="Material" id=2]
-[ext_resource path="res://Target.cs" type="Script" id=3]
+[ext_resource path="res://objects/target/Target.cs" type="Script" id=3]
+
 
 [sub_resource type="ArrayMesh" id=1]
 resource_name = "Cube.048"

@@ -14,9 +14,10 @@ You should have received a copy of the GNU General Public License along with thi
 using Godot;
 using System;
 
-public class SlidingDoors : KinematicBody
+public class SlidingDoors : Spatial
 {
     private Area _area;
+    private KinematicBody _door;
     private bool _opening;
     [Export]
     public float DoorSpeed = 2;
@@ -29,11 +30,12 @@ public class SlidingDoors : KinematicBody
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
+        _door = GetNode<KinematicBody>("Door");
         _area = GetNode<Area>("Area");
         _area.Connect("body_entered", this, "BodyEnteredArea");
         _area.Connect("body_exited", this, "BodyExitedArea");
-        _maxTotalTransform = GlobalTransform.Translated(new Vector3(MaxOpen,0,0));
-        _originalTransform = GlobalTransform;
+        _maxTotalTransform = _door.GlobalTransform.Translated(new Vector3(MaxOpen,0,0));
+        _originalTransform = _door.GlobalTransform;
         _translation = GlobalTransform;
         _opening = false;
     }
@@ -53,9 +55,9 @@ public class SlidingDoors : KinematicBody
     public override void _PhysicsProcess(float delta)
     {
         _translation = GlobalTransform.Translated(new Vector3(delta*DoorSpeed,0,0));
-        if(_opening && GlobalTransform.origin > _maxTotalTransform.origin)
-            GlobalTransform = GlobalTransform.Translated(new Vector3(delta*DoorSpeed,0,0));
-        else if (!_opening && GlobalTransform.origin < _originalTransform.origin)
-            GlobalTransform = GlobalTransform.Translated(new Vector3(delta*-DoorSpeed,0,0));
+        if(_opening && _door.GlobalTransform.origin > _maxTotalTransform.origin)
+            _door.GlobalTransform = _door.GlobalTransform.Translated(new Vector3(delta*DoorSpeed,0,0));
+        else if (!_opening && _door.GlobalTransform.origin < _originalTransform.origin)
+            _door.GlobalTransform = _door.GlobalTransform.Translated(new Vector3(delta*-DoorSpeed,0,0));
     }
 }

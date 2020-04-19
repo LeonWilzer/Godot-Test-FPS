@@ -3,7 +3,8 @@
 [ext_resource path="res://assets/Gamemode_Objects/Metal_One.material" type="Material" id=1]
 [ext_resource path="res://assets/Gamemode_Objects/Metal_Two.material" type="Material" id=2]
 [ext_resource path="res://assets/Gamemode_Objects/Metal_Red.material" type="Material" id=3]
-[ext_resource path="res://HealthPickup.cs" type="Script" id=4]
+[ext_resource path="res://pickupables/kits/health/HealthPickup.cs" type="Script" id=4]
+
 
 [sub_resource type="ArrayMesh" id=1]
 resource_name = "Cube.055"

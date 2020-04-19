@@ -39,7 +39,7 @@ public class Target : StaticBody
         _targetRespawnTime = 0;
         _brokenTargetHolder = GetParent().GetNode<Spatial>("Broken_Target_Holder");
         _targetCollisionShape = GetNode<CollisionShape>("Collision_Shape");
-        _destroyedTarget = ResourceLoader.Load<PackedScene>("res://Broken_Target.tscn");
+        _destroyedTarget = ResourceLoader.Load<PackedScene>("res://objects/target/Broken_Target.tscn");
     }
 
     public override void _PhysicsProcess(float delta)

@@ -442,13 +442,12 @@ public class Player : KinematicBody
 	{
 		//_uiStatusLabel.Text = "FPS: " + Engine.GetFramesPerSecond();
 		if (_currentWeaponName == "UNARMED" || _currentWeaponName == "KNIFE")
-			_uiStatusLabel.Text = "HEALTH: " + Health + "\n" + _grenadeNames[_currentFragGrenade] + ": " + _grenadeAmmounts[_currentFragGrenade]
-			+ "\nFPS: " + Engine.GetFramesPerSecond();
+			_uiStatusLabel.Text = "HEALTH: " + Health + "\n" + _grenadeNames[_currentFragGrenade] + ": " + _grenadeAmmounts[_currentFragGrenade];
 		else
 		{
 			Weapon _currentWeapon = _weapons[_currentWeaponName];
 			_uiStatusLabel.Text = "HEALTH: " + Health.ToString() + "\nAMMO: " + _currentWeapon.AmmoInWeapon.ToString() + "/" + _currentWeapon.SpareAmmo.ToString()
-			+ "\n" + _grenadeNames[_currentFragGrenade] + ": " + _grenadeAmmounts[_currentFragGrenade] + "\nFPS: " + Engine.GetFramesPerSecond();
+			+ "\n" + _grenadeNames[_currentFragGrenade] + ": " + _grenadeAmmounts[_currentFragGrenade];
 		}
 	}
 
