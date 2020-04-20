@@ -13,44 +13,36 @@ You should have received a copy of the GNU General Public License along with thi
 
 using Godot;
 using System;
+using System.Collections.Generic;
 
-public class PausePopup : WindowDialog
+public class SpawnPoint : Spatial
 {
-    private string _mainMenuPath;
-    private PackedScene _popupScene;
-    private Globals _globals;
-    public Player Player { get; set; }
-
+    private PackedScene _playerScene;
+    private Dictionary<int, Player> _playerDictionary;
+    Node _sceneRoot;
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
-        _mainMenuPath = "res://ui/menus/mainmenu/MainMenu.tscn";
-        _globals = GetNode<Globals>("/root/Globals");
-
-		GetNode("Button_quit").Connect("pressed", this, "PopupQuit");
-		Connect("popup_hide", this, "PopupHide");
-		GetNode("Button_resume").Connect("pressed", this, "PopupClosed");
+        _playerScene = ResourceLoader.Load<PackedScene>("res://player/Player.tscn");
+        _playerDictionary = new Dictionary<int, Player>();
+        _sceneRoot = GetTree().Root.GetChild(0);
     }
 
-    public void PopupHide(){
-        GetTree().Paused = false;
-        QueueFree();
-    }
-     public void PopupClosed()
+    public void SpawnNewPlayer()
     {
-        Input.SetMouseMode(Input.MouseMode.Captured);
-        PopupHide();
+        Player _player = (Player)_playerScene.Instance();
+        _sceneRoot.AddChild(_player);
+        _player.SpawnPoint = this;
+        _player.GlobalTransform = GlobalTransform;
     }
 
-    public void PopupQuit()
+    public void RespawnPlayer(Player _player)
     {
-        GetTree().Paused = false;
+        _player.GlobalTransform = GlobalTransform;
+    }
 
-        _globals.LoadNewScene(_mainMenuPath);
-
-        QueueFree();
-        Player.QueueFree();
-
-        Input.SetMouseMode(Input.MouseMode.Visible);
+    public void RespawnPlayer(int _player)
+    {
+        _playerDictionary[_player].GlobalTransform = new Transform(_playerDictionary[_player].GlobalTransform.basis,GlobalTransform.origin);
     }
 }

@@ -17,6 +17,7 @@ using System;
 public class Globals : Node
 {
     public float MouseSensitivity;
+    private Transform[] _respawnPoints;
 
     // GUI/UI related variables
     public CanvasLayer CanvasLayer { get; set; }

@@ -40,16 +40,21 @@ public class Player : KinematicBody
 	public float FragGrenadeThrowForce = 50f;
 	[Export]
 	public float ObjectThrowForce = 60;
-	public float ObjectGrabDistance = 7;
+	public float ObjectGrabDistance = 10;
 	public float ObjectGrabRayDistance = 10;
 
 	// Character Stats
 	[Export]
-	public int Health = 100;
+	public int Health = 150;
 	[Export]
 	public int MaxHealth = 150;
+	// 0: Frag FragGrenade 1: Sticky FragGrenade
 	[Export]
-	public int MaxFragGrenades = 4;
+	private int[] _grenadeAmmounts = new int[] { 2, 2 };
+	[Export]
+	private int MaxGrenades = 4;
+	[Export]
+	public float RespawnTime = 4;
 
 	// Variables relevant for character actions.
 	private bool _isSprinting;
@@ -59,11 +64,12 @@ public class Player : KinematicBody
 	private bool _reloadingWeapon;
 	private float _mouseScrollValue;
 	private float _mouseSensitivityScrollWheel;
-	private int _currentFragGrenade;
-	private int[] _grenadeAmmounts;
+	private int _currentGrenade;
 	private string[] _grenadeNames;
 	private object _grabbedObject;
 	private RigidBody _grabbedRigid;
+	private float _deadTime;
+	private bool _isDead;
 
 	// Relevant nodes.
 	private SpotLight _flashlight;
@@ -76,6 +82,7 @@ public class Player : KinematicBody
 	private Spatial _rotationHelper;
 	private PausePopup _pausePopup;
 	private Globals _globals;
+	public SpawnPoint SpawnPoint { get; set; }
 
 	// Relevant scenes.
 	private PackedScene _fragGrenadeScene;
@@ -147,31 +154,39 @@ public class Player : KinematicBody
 		_isSprinting = false;
 		_reloadingWeapon = false;
 		_mouseSensitivityScrollWheel = 0.08f;
-		_currentFragGrenade = 0;
+		_currentGrenade = 0;
+		_deadTime = 0;
+		_isDead = false;
 
 		// Character stats
-		// 0: Frag FragGrenade 1: Sticky FragGrenade
-		_grenadeAmmounts = new int[] { 2, 2 };
 		_grenadeNames = new string[] { "Frag Grenade", "Sticky Grenade" };
+		RespawnTime = 4;
 
 		// The method being called once an fire animation plays.
 		AnimationPlayer.CallbackFunction = GD.FuncRef(this, nameof(FireBullet));
 
 		Camera.Far = 1000;
-		// Captures mouse, used as indication that all the variables are assigned.
+		// Set Transformation to spawnpoint
+		// GlobalTransform = _globals.GetRespawnPosition(GlobalTransform.basis);
+
+		// Captures mouse, used as indication that setup is complete.
 		Input.SetMouseMode(Input.MouseMode.Captured);
 	}
 	
 	public override void _PhysicsProcess(float delta)
 	{
-		ProcessInput(delta);
-		ProcessMovement(delta);
+		if (!_isDead)
+		{
+			ProcessInput(delta);
+			ProcessMovement(delta);
+		}
 		if (_grabbedObject == null)
 		{
-		ProcessChangingWeapons(delta);
-		ProcessReloading(delta);
+			ProcessChangingWeapons(delta);
+			ProcessReloading(delta);
 		}
 		ProcessUI(delta);
+		ProcessRespawn(delta);
 	}
 	
 	private void ProcessInput(float delta)
@@ -299,18 +314,18 @@ public class Player : KinematicBody
 
 		if (Input.IsActionJustPressed("change_grenade"))
 		{
-			if (_currentFragGrenade == 0)
-				_currentFragGrenade = 1;
-			else if (_currentFragGrenade == 1)
-				_currentFragGrenade = 0;
+			if (_currentGrenade == 0)
+				_currentGrenade = 1;
+			else if (_currentGrenade == 1)
+				_currentGrenade = 0;
 		}
 
-		if (Input.IsActionJustPressed("fire_grenade") && _grenadeAmmounts[_currentFragGrenade] > 0)
+		if (Input.IsActionJustPressed("fire_grenade") && _grenadeAmmounts[_currentGrenade] > 0)
 		{
-			_grenadeAmmounts[_currentFragGrenade]--;
+			_grenadeAmmounts[_currentGrenade]--;
 
 			Grenade _grenadeClone;
-			if (_currentFragGrenade == 0)
+			if (_currentGrenade == 0)
 				_grenadeClone = (FragGrenade)_fragGrenadeScene.Instance();
 			else
 			{
@@ -378,6 +393,7 @@ public class Player : KinematicBody
 			if (_pausePopup == null)
 			{
 				_pausePopup = (PausePopup)_pausePopupScene.Instance();
+				_pausePopup.Player = this;
 
 				_globals.CanvasLayer.AddChild(_pausePopup);
 				_pausePopup.PopupCentered();
@@ -463,12 +479,12 @@ public class Player : KinematicBody
 	{
 		//_uiStatusLabel.Text = "FPS: " + Engine.GetFramesPerSecond();
 		if (_currentWeaponName == "UNARMED" || _currentWeaponName == "KNIFE")
-			_uiStatusLabel.Text = "HEALTH: " + Health + "\n" + _grenadeNames[_currentFragGrenade] + ": " + _grenadeAmmounts[_currentFragGrenade];
+			_uiStatusLabel.Text = "HEALTH: " + Health + "\n" + _grenadeNames[_currentGrenade] + ": " + _grenadeAmmounts[_currentGrenade];
 		else
 		{
 			Weapon _currentWeapon = _weapons[_currentWeaponName];
 			_uiStatusLabel.Text = "HEALTH: " + Health.ToString() + "\nAMMO: " + _currentWeapon.AmmoInWeapon.ToString() + "/" + _currentWeapon.SpareAmmo.ToString()
-			+ "\n" + _grenadeNames[_currentFragGrenade] + ": " + _grenadeAmmounts[_currentFragGrenade];
+			+ "\n" + _grenadeNames[_currentGrenade] + ": " + _grenadeAmmounts[_currentGrenade];
 		}
 	}
 
@@ -482,9 +498,65 @@ public class Player : KinematicBody
 			_reloadingWeapon = false;
 		}
 	}
+
+	private void ProcessRespawn(float delta)
+	{
+		if (Health <= 0 && !_isDead)
+		{
+			GetNode<CollisionShape>("Body_CollisionShape").Disabled = true;
+			GetNode<CollisionShape>("Feet_CollisionShape").Disabled = true;
+
+			_changingWeapon = true;
+			_changingWeaponName = "UNARMED";
+
+			GetNode<ColorRect>("HUD/Death_Screen").Visible = true;
+
+			GetNode<Panel>("HUD/Panel").Visible = false;
+			GetNode<Control>("HUD/Crosshair").Visible = false;
+
+			_deadTime = RespawnTime;
+			_isDead = true;
+		}
+
+		if (_isDead)
+		{
+			_deadTime -= delta;
+			GetNode<Label>("HUD/Death_Screen/Label").Text = "You died\n" + (int)_deadTime + " seconds till respawn";
+
+			if (_deadTime <= 0)
+			{
+				SpawnPoint.RespawnPlayer(this);
+
+				GetNode<CollisionShape>("Body_CollisionShape").Disabled = false;
+				GetNode<CollisionShape>("Feet_CollisionShape").Disabled = false;
+
+				GetNode<ColorRect>("HUD/Death_Screen").Visible = false;
+
+				GetNode<Panel>("HUD/Panel").Visible = true;
+				GetNode<Control>("HUD/Crosshair").Visible = true;
+
+				foreach (string _weapon in _weapons.Keys)
+				{
+					Weapon _weaponNode = _weapons[_weapon];
+					if (_weaponNode != null)
+						_weaponNode.ResetWeapon();
+				}
+
+				Health = MaxHealth;
+
+				for (int i=0; i<_grenadeAmmounts.Length; i++)
+					_grenadeAmmounts[i] = MaxGrenades / 2;
+				_currentGrenade = 0;
+
+				_isDead = false;
+			}
+		}
+	}
 	
 	public override void _Input(InputEvent @event)
-	{	
+	{
+		if (_isDead)
+			return;
 		// Rotates player and camera based on mouse input, but only if it's captured.
 		if (@event is InputEventMouseMotion && Input.GetMouseMode() == Input.MouseMode.Captured)
 		{
@@ -568,7 +640,7 @@ public class Player : KinematicBody
 		for (int i = 0; i<_grenadeAmmounts.Length; i++ )
 		{
 			_grenadeAmmounts[i] += _additionalFragGrenades;
-			_grenadeAmmounts[i] = Mathf.Clamp(_grenadeAmmounts[i], 0, MaxFragGrenades);
+			_grenadeAmmounts[i] = Mathf.Clamp(_grenadeAmmounts[i], 0, MaxGrenades);
 		}
 	}
 

@@ -57,6 +57,8 @@
     <Compile Include="common\audioplayer\SimpleAudioPlayer.cs" />
     <Compile Include="common\Globals.cs" />
     <Compile Include="common\Hit.cs" />
+    <Compile Include="common\spawnpoint\SpawnPoint.cs" />
+    <Compile Include="levels\main\Main.cs" />
     <Compile Include="objects\doors\sliding\SlidingDoors.cs" />
     <Compile Include="objects\target\Target.cs" />
     <Compile Include="pickupables\kits\ammo\AmmoPickup.cs" />

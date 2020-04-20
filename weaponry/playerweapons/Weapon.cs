@@ -107,4 +107,9 @@ public abstract class Weapon : Spatial
         }
         return false;
     }
+
+    public void ResetWeapon()
+    {
+        
+    }
 }

@@ -16,7 +16,7 @@ using System;
 
 public class Pistol : Weapon
 {
-    private PackedScene _bulletscene;
+    private PackedScene _bulletScene;
 
     // Constructor
     public override void _Ready()
@@ -33,7 +33,7 @@ public class Pistol : Weapon
         CanReload = true;
         CanRefill = true;
         ReloadingAnimName = "Pistol_reload";
-        _bulletscene = ResourceLoader.Load<PackedScene>("res://weaponry/bullets/standard/StandardBullet.tscn");
+        _bulletScene = ResourceLoader.Load<PackedScene>("res://weaponry/bullets/standard/StandardBullet.tscn");
         gunFireSound = "Pistol_shot";
         GunCockSound = "Gun_cock";
         MaxAmmo = 50;
@@ -41,13 +41,13 @@ public class Pistol : Weapon
 
     public override void FireWeapon()
     {
-        StandardBullet clone = (StandardBullet)_bulletscene.Instance();
-        Node sceneRoot = GetTree().Root.GetChild(0);
-        sceneRoot.AddChild(clone);
+        StandardBullet _clone = (StandardBullet)_bulletScene.Instance();
+        Node _sceneRoot = GetTree().Root.GetChild(0);
+        _sceneRoot.AddChild(_clone);
 
-        clone.GlobalTransform = GlobalTransform;
-        clone.Scale = new Vector3(4, 4, 4);
-        clone.BulletDamage = damage;
+        _clone.GlobalTransform = GlobalTransform;
+        _clone.Scale = new Vector3(4, 4, 4);
+        _clone.BulletDamage = damage;
         AmmoInWeapon--;
         Playernode.CreateSound(gunFireSound);
 

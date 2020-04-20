@@ -4230,6 +4230,9 @@ margin_right = 2.5
 margin_bottom = 20.5
 texture = ExtResource( 7 )
 expand = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Top_IMG" type="TextureRect" parent="HUD/Crosshair"]
 anchor_left = 0.5
