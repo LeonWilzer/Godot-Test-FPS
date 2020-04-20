@@ -16,16 +16,43 @@ using System;
 
 public class Globals : Node
 {
-    public float MouseSensitivity ;
+    public float MouseSensitivity;
+
+    // GUI/UI related variables
+    private CanvasLayer _canvasLayer;
+
+    private PackedScene _debugDisplayScene;
+    private DebugDisplay _debugDisplay;
+
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
         MouseSensitivity = 0.08f;
+        _debugDisplayScene = ResourceLoader.Load<PackedScene>("res://ui/hud/debugging/DebugDisplay.tscn");
+        _canvasLayer = new CanvasLayer();
+        AddChild(_canvasLayer);
     }
 
     public void LoadNewScene(string _newScenePath)
     {
         GetTree().ChangeScene(_newScenePath);
+    }
+
+    public void SetDebugDisplay(bool _displayOn)
+    {
+        if (!_displayOn)
+        {
+            if (_debugDisplay != null)
+                {
+                    _debugDisplay.QueueFree();
+                    _debugDisplay = null;
+                }
+        }
+        else if (_debugDisplay == null)
+        {
+            _debugDisplay = (DebugDisplay)_debugDisplayScene.Instance();
+            _canvasLayer.AddChild(_debugDisplay);
+        }
     }
 }

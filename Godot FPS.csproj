@@ -63,7 +63,7 @@
     <Compile Include="pickupables\kits\health\HealthPickup.cs" />
     <Compile Include="player\Player.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ui\hud\debug\DebugDisplay.cs" />
+    <Compile Include="ui\hud\debugging\DebugDisplay.cs" />
     <Compile Include="ui\menus\mainmenu\MainMenu.cs" />
     <Compile Include="weaponry\bullets\standard\StandardBullet.cs" />
     <Compile Include="weaponry\grenades\frag\FragGrenade.cs" />

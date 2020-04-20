@@ -64,7 +64,7 @@ public class MainMenu : Control
         else if (_buttonName == "vsync")
             OS.VsyncEnabled = GetNode<CheckButton>("Options_Menu/Check_Button_VSync").Pressed;
         else if (_buttonName == "debug")
-            return;
+            _globals.SetDebugDisplay(GetNode<CheckButton>("Options_Menu/Check_Button_Debug").Pressed);
     }
 
     public void SetMouseSensitivity()
