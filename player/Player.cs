@@ -163,6 +163,7 @@ public class Player : KinematicBody
 		ProcessReloading(delta);
 		}
 		ProcessUI(delta);
+		ProcessMisc(delta);
 	}
 	
 	private void ProcessInput(float delta)
@@ -194,17 +195,6 @@ public class Player : KinematicBody
 		//  Jumping
 		if (IsOnFloor() && Input.IsActionJustPressed("movement_jump"))
 				_vel.y = JumpSpeed;
-		//  -------------------------------------------------------------------
-
-		//  -------------------------------------------------------------------
-		//  Capturing/Freeing the cursor
-		if (Input.IsActionJustPressed("ui_cancel"))
-		{
-			if (Input.GetMouseMode() == Input.MouseMode.Visible)
-				Input.SetMouseMode(Input.MouseMode.Captured);
-			else
-				Input.SetMouseMode(Input.MouseMode.Visible);
-		}
 		//  -------------------------------------------------------------------
 		
 		//  -------------------------------------------------------------------
@@ -555,5 +545,14 @@ public class Player : KinematicBody
 	{
 		Health -= _damage;
 		Health = Mathf.Clamp(Health, 0, MaxHealth);
+	}
+
+	public void ProcessMisc(float delta)
+	{
+		//  -------------------------------------------------------------------
+		//  Capturing the cursor
+			if (Input.GetMouseMode() == Input.MouseMode.Visible)
+				Input.SetMouseMode(Input.MouseMode.Captured);
+		//  -------------------------------------------------------------------
 	}
 }

@@ -22,7 +22,7 @@ public class DebugDisplay : Control
     public override void _Ready()
     {
         GetNode<Label>("OS_Label").Text = "OS: " + OS.GetName();
-        GetNode<Label>("Engine_Label").Text = "Godot version: " + Engine.GetVersionInfo();
+        GetNode<Label>("Engine_Label").Text = "Godot version: " + Engine.GetVersionInfo()["string"];
         _fps = GetNode<Label>("FPS_Label");
     }
 
