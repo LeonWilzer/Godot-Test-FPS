@@ -16,23 +16,33 @@ using System;
 
 public class SimpleAudioPlayer : Spatial
 {
+    // Audio resources
     private AudioStream _audioPistolShot;
     private AudioStream _audioGunCock;
     private AudioStream _audioRifleShot;
     private AudioStream _explosionSound;
 
+    // Nodes
     private AudioStreamPlayer _audioNodeGlobal;
     private AudioStreamPlayer3D _audioNodeLocal;
+
+    // Attributes
+    private bool _shouldLoop;
+    private Globals _globals;
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
+        // Audio resources
         _audioPistolShot = ResourceLoader.Load<AudioStream>("res://assets/audio/sounds/weapons/gun_revolver_pistol_shot_04.wav");
         _audioGunCock = ResourceLoader.Load<AudioStream>("res://assets/audio/sounds/weapons/GUN_MP5K_Cocked_Full_Action_02.wav");
         _audioRifleShot = ResourceLoader.Load<AudioStream>("res://assets/audio/sounds/weapons/gun_rifle_sniper_shot_01.wav");
         _explosionSound = ResourceLoader.Load<AudioStream>("res://assets/audio/sounds/weapons/explosion_large_no_tail_03.wav");
+        // Nodes
         _audioNodeGlobal = GetNode<AudioStreamPlayer>("Audio_Stream_Player");
         _audioNodeLocal = GetNode<AudioStreamPlayer3D>("Audio_Stream_Player_3D");
+        _globals = GetNode<Globals>("/root/Globals");
+        // Setup
         _audioNodeGlobal.Connect("finished", this, "DestroySelfGlobal");
         _audioNodeGlobal.Stop();
         _audioNodeGlobal.MixTarget = AudioStreamPlayer.MixTargetEnum.Surround;
@@ -41,6 +51,9 @@ public class SimpleAudioPlayer : Spatial
         _audioNodeLocal.AttenuationFilterDb = -0.1f;
         _audioNodeLocal.MaxDb = 50;
         _audioNodeLocal.AttenuationFilterCutoffHz = 10000;
+        // Attributes
+        _shouldLoop = false;
+        _globals = GetNode<Globals>("/root/Globals");
     }
 
     public void PlaySoundGlobal(string _soundName)
@@ -48,7 +61,7 @@ public class SimpleAudioPlayer : Spatial
 
         if (_audioPistolShot == null || _audioRifleShot == null || _audioGunCock == null)
         {
-            GD.Print("Audio not set!");
+            GD.Print("No audio stream passed; cannot play sound");
             QueueFree();
             return;
         }
@@ -80,7 +93,7 @@ public class SimpleAudioPlayer : Spatial
 
         if (_audioPistolShot == null || _audioRifleShot == null || _audioGunCock == null)
         {
-            GD.Print("Audio not set!");
+            GD.Print("No audio stream passed; cannot play sound");
             QueueFree();
             return;
         }
