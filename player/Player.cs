@@ -163,7 +163,6 @@ public class Player : KinematicBody
 		ProcessReloading(delta);
 		}
 		ProcessUI(delta);
-		ProcessMisc(delta);
 	}
 	
 	private void ProcessInput(float delta)
@@ -545,14 +544,5 @@ public class Player : KinematicBody
 	{
 		Health -= _damage;
 		Health = Mathf.Clamp(Health, 0, MaxHealth);
-	}
-
-	public void ProcessMisc(float delta)
-	{
-		//  -------------------------------------------------------------------
-		//  Capturing the cursor
-			if (Input.GetMouseMode() == Input.MouseMode.Visible)
-				Input.SetMouseMode(Input.MouseMode.Captured);
-		//  -------------------------------------------------------------------
 	}
 }

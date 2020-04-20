@@ -83,7 +83,8 @@ public class Globals : Node
     public void PopupClosed()
     {
         GetTree().Paused = false;
-
+        Input.SetMouseMode(Input.MouseMode.Captured);
+        
         if (_popup != null)
         {
             _popup.QueueFree();
