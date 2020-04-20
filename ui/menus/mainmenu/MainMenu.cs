@@ -30,10 +30,10 @@ public class MainMenu : Control
         
         // Note: insert Connect methods for star and options andhere once found out how to pass parameters down to methods.
 
-        Input.SetMouseMode(Input.MouseMode.Visible);
-
         _globals = GetNode<Globals>("/root/Globals");
         GetNode<HSlider>("Options_Menu/HSlider_Mouse_Sensitivity").Value = _globals.MouseSensitivity;
+
+        Input.SetMouseMode(Input.MouseMode.Visible);
     }
 
     public void StartMenuButtonPressed(string _buttonName)

@@ -19,24 +19,18 @@ public class Globals : Node
     public float MouseSensitivity;
 
     // GUI/UI related variables
-    private CanvasLayer _canvasLayer;
+    public CanvasLayer CanvasLayer { get; set; }
 
     private PackedScene _debugDisplayScene;
     private DebugDisplay _debugDisplay;
-
-    private string _mainMenuPath;
-    private PackedScene _popupScene;
-    private Popup _popup;
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
         MouseSensitivity = 0.08f;
         _debugDisplayScene = ResourceLoader.Load<PackedScene>("res://ui/hud/debugging/DebugDisplay.tscn");
-        _canvasLayer = new CanvasLayer();
-        AddChild(_canvasLayer);
-        _mainMenuPath = "res://ui/menus/mainmenu/MainMenu.tscn";
-        _popupScene = ResourceLoader.Load<PackedScene>("res://ui/popups/pause/PausePopup.tscn");
+        CanvasLayer = new CanvasLayer();
+        AddChild(CanvasLayer);
     }
 
     public void LoadNewScene(string _newScenePath)
@@ -57,52 +51,7 @@ public class Globals : Node
         else if (_debugDisplay == null)
         {
             _debugDisplay = (DebugDisplay)_debugDisplayScene.Instance();
-            _canvasLayer.AddChild(_debugDisplay);
+            CanvasLayer.AddChild(_debugDisplay);
         }
-    }
-
-    public override void _Process(float delta)
-    {
-        if (Input.IsActionJustPressed("ui_cancel") && _popup == null)
-        {
-            _popup = (Popup)_popupScene.Instance();
-
-            _popup.GetNode<Button>("Button_quit").Connect("pressed", this, "PopupQuit");
-            _popup.Connect("popup_hide", this, "PopupClosed");
-            _popup.GetNode<Button>("Button_resume").Connect("pressed", this, "PopupClosed");
-
-            _canvasLayer.AddChild(_popup);
-            _popup.PopupCentered();
-
-            Input.SetMouseMode(Input.MouseMode.Visible);
-
-            GetTree().Paused = true;
-        }
-    }
-
-    public void PopupClosed()
-    {
-        GetTree().Paused = false;
-        Input.SetMouseMode(Input.MouseMode.Captured);
-        
-        if (_popup != null)
-        {
-            _popup.QueueFree();
-            _popup = null;
-        }
-    }
-
-    public void PopupQuit()
-    {
-        GetTree().Paused = false;
-
-        Input.SetMouseMode(Input.MouseMode.Visible);
-
-        if (_popup != null)
-        {
-            _popup.QueueFree();
-            _popup = null;
-        }
-        LoadNewScene(_mainMenuPath);
     }
 }

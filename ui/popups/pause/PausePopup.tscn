@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://assets/Titillium-Regular.otf" type="DynamicFontData" id=1]
+[ext_resource path="res://ui/popups/pause/PausePopup.cs" type="Script" id=2]
 
 [sub_resource type="DynamicFont" id=1]
 size = 32
@@ -20,8 +21,10 @@ margin_bottom = 115.0
 rect_min_size = Vector2( 280, 230 )
 custom_fonts/title_font = SubResource( 1 )
 window_title = "Game paused"
+script = ExtResource( 2 )
 
 [node name="Button_resume" type="Button" parent="."]
+visible = false
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5

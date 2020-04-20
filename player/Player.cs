@@ -65,7 +65,7 @@ public class Player : KinematicBody
 	private object _grabbedObject;
 	private RigidBody _grabbedRigid;
 
-	// Relevant Nodes.
+	// Relevant nodes.
 	private SpotLight _flashlight;
 	public AnimationManager AnimationPlayer { get; private set; }
 	private PackedScene _simpleAudioPlayer;
@@ -74,8 +74,13 @@ public class Player : KinematicBody
 	private Label _uiStatusLabel;
 	public Camera Camera { get; private set; }
 	private Spatial _rotationHelper;
+	private PausePopup _pausePopup;
+	private Globals _globals;
+
+	// Relevant scenes.
 	private PackedScene _fragGrenadeScene;
 	private PackedScene _stickyGrenadeScene;
+	private PackedScene _pausePopupScene;
 
 	// Dictionaries for weapons.
 	private Dictionary<string, Weapon> _weapons = new Dictionary<string, Weapon>();
@@ -89,7 +94,7 @@ public class Player : KinematicBody
 		_vel = new Vector3();
 		_dir = new Vector3();
 
-		// Assigns relevant Nodes to variables.
+		// Assigns relevant nodes to variables.
 		Camera = GetNode<Camera>("Rotation_Helper/Camera");
 		_rotationHelper = GetNode<Spatial>("Rotation_Helper");
 		_flashlight = GetNode<SpotLight>("Rotation_Helper/Flashlight");
@@ -97,8 +102,12 @@ public class Player : KinematicBody
 		_simpleAudioPlayer = ResourceLoader.Load<PackedScene>("res://common/audioplayer/SimpleAudioPlayer.tscn");
 		_uiStatusLabel = GetNode<Label>("HUD/Panel/Gun_label");
 		Vector3 GunAimPointPos = GetNode<Spatial>("Rotation_Helper/Gun_Aim_Point").GlobalTransform.origin;
+		_globals = GetNode<Globals>("/root/Globals");
+
+		// Assigns relevant scenes to variables.
 		_fragGrenadeScene = ResourceLoader.Load<PackedScene>("res://weaponry/grenades/frag/FragGrenade.tscn");
 		_stickyGrenadeScene = ResourceLoader.Load<PackedScene>("res://weaponry/grenades/sticky/StickyGrenade.tscn");
+		_pausePopupScene = ResourceLoader.Load<PackedScene>("res://ui/popups/pause/PausePopup.tscn");
 
 		// Dictionary for Weapon Nodes.
 		_weapons.Add("KNIFE", GetNode<Knife>("Rotation_Helper/Gun_Fire_Points/Knife"));
@@ -359,6 +368,29 @@ public class Player : KinematicBody
 			_grabbedRigid = (RigidBody)_grabbedObject;
 			Transform _transform = new Transform(_grabbedRigid.GlobalTransform.basis, Camera.GlobalTransform.origin + (-Camera.GlobalTransform.basis.z.Normalized() * ObjectGrabDistance));
 			_grabbedRigid.GlobalTransform = _transform;
+		}
+		//  -------------------------------------------------------------------
+
+		//  -------------------------------------------------------------------
+		//	Pause Popup
+		if (Input.IsActionJustPressed("ui_cancel"))
+		{
+			if (_pausePopup == null)
+			{
+				_pausePopup = (PausePopup)_pausePopupScene.Instance();
+
+				_globals.CanvasLayer.AddChild(_pausePopup);
+				_pausePopup.PopupCentered();
+
+				Input.SetMouseMode(Input.MouseMode.Visible);
+
+				GetTree().Paused = true;
+			}
+			else
+			{
+				Input.SetMouseMode(Input.MouseMode.Captured);
+				_pausePopup = null;
+			}
 		}
 		//  -------------------------------------------------------------------
 	}
