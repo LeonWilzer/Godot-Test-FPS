@@ -61,9 +61,4 @@ public class MainMenu : Control
         else if (_buttonName == "debug")
             _globals.SetDebugDisplay(GetNode<CheckButton>("OptionsMenu/Check_Button_Debug").Pressed);
     }
-
-    public void SetResolution(int _index)
-    {
-        GD.Print(_index);
-    }
 }
