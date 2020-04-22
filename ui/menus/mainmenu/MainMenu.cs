@@ -16,22 +16,20 @@ using System;
 
 public class MainMenu : Control
 {
-    private Panel _startMenu;
-    private Panel _levelSelectMenu;
-    private Panel _optionsMenu;
+    private VBoxContainer _startMenu;
+    private VBoxContainer _optionsMenu;
     private Globals _globals;
 
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
-        _startMenu = GetNode<Panel>("Start_Menu");
-        _optionsMenu = GetNode<Panel>("Options_Menu");
+        _startMenu = GetNode<VBoxContainer>("StartMenu");
+        _optionsMenu = GetNode<VBoxContainer>("OptionsMenu");
         
         // Note: insert Connect methods for star and options andhere once found out how to pass parameters down to methods.
 
         _globals = GetNode<Globals>("/root/Globals");
-        GetNode<HSlider>("Options_Menu/HSlider_Mouse_Sensitivity").Value = _globals.MouseSensitivity;
 
         Input.SetMouseMode(Input.MouseMode.Visible);
     }
@@ -39,10 +37,7 @@ public class MainMenu : Control
     public void StartMenuButtonPressed(string _buttonName)
     {
         if (_buttonName == "start")
-        {
-            SetMouseSensitivity();
             _globals.LoadNewScene("res://levels/main/Main.tscn");
-        }
         else if (_buttonName == "options")
         {
             _startMenu.Visible = false;
@@ -57,18 +52,18 @@ public class MainMenu : Control
         if (_buttonName == "back")
         {
             _optionsMenu.Visible = false;
-            _startMenu.Visible = true;
+           _startMenu.Visible = true;
         }
         else if (_buttonName == "fullscreen")
             OS.WindowFullscreen = !OS.WindowFullscreen;
         else if (_buttonName == "vsync")
-            OS.VsyncEnabled = GetNode<CheckButton>("Options_Menu/Check_Button_VSync").Pressed;
+            OS.VsyncEnabled = GetNode<CheckButton>("OptionsMenu/Check_Button_VSync").Pressed;
         else if (_buttonName == "debug")
-            _globals.SetDebugDisplay(GetNode<CheckButton>("Options_Menu/Check_Button_Debug").Pressed);
+            _globals.SetDebugDisplay(GetNode<CheckButton>("OptionsMenu/Check_Button_Debug").Pressed);
     }
 
-    public void SetMouseSensitivity()
+    public void SetResolution(int _index)
     {
-        _globals.MouseSensitivity = (float)GetNode<HSlider>("Options_Menu/HSlider_Mouse_Sensitivity").Value;
+        GD.Print(_index);
     }
 }
