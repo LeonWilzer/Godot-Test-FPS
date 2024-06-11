@@ -1,6 +1,6 @@
 # Godot Test FPS
 ## About
-These are the project files for a first person shooter made with the Godot game engine. At the current stage it is mostly a port of the official Godot FPS tutorial (from GDScript to C#). Extending the game past official tutorials is definitely planned.
+These are the project files for a first person shooter made with the Godot game engine. At the current stage it is mostly a port of the official Godot FPS tutorial (from GDScript to C#). ~~Extending the game past official tutorials is definitely planned.~~
 ## Licensing
 The source code is licensed under GPL v3.0 or later.
 
