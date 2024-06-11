@@ -7,7 +7,7 @@ The source code is licensed under GPL v3.0 or later.
 The licensing for assets and other files is still pending as it is planned to replace the assets provided by the Godot tutorial with custom-made ones. So please refer to the official Godot FPS tutorial for more information about the used assets.
 https://docs.godotengine.org/en/3.1/tutorials/3d/fps_tutorial/part_one.html
 
-**Contact:** leon.wilzer@protonmail.com, if you believe that your property is being misused here.
+**Contact:** godot@wilzer.xyz, if you believe that your property is being misused here.
 
 ## How to play
 ### Stable (easy)
